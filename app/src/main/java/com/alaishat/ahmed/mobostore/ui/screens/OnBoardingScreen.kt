@@ -57,9 +57,9 @@ fun OnBoardingScreen() {
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(horizontal = 50.dp),
-            lineHeight = 50.sp,
-            text = "Find your Gadget", color = Color.White,
-            fontSize = 50.sp
+            text = "Find your Gadget",
+            color = Color.White,
+            style = MaterialTheme.typography.displayLarge
         )
         Image(
             painter = painterResource(id = R.drawable.saly_onboarding),
