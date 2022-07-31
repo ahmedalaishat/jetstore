@@ -1,9 +1,8 @@
 package com.alaishat.ahmed.mobostore.ui.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,12 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.ui.components.AppButton
+import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.advancedShadow
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -28,9 +31,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
-fun OnBoardingScreen() {
-    val ctx = LocalContext.current
+fun OnBoardingScreen(navController: NavHostController) {
+//    val ctx = LocalContext.current
     val systemUiController = rememberSystemUiController()
+
     val color = MaterialTheme.colorScheme.secondary
     SideEffect {
         // Update all of the system bar colors to be transparent, and use
@@ -44,7 +48,9 @@ fun OnBoardingScreen() {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.secondary),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(
@@ -72,21 +78,27 @@ fun OnBoardingScreen() {
                 .absoluteOffset(0.dp, (-64).dp)
                 .advancedShadow(color = Color(0xFF6350FF), 0.99f, 0.dp, 32.dp, 32.dp),
         )
-        Button(
-            onClick = { Toast.makeText(ctx, "Started", Toast.LENGTH_LONG).show() },
+        AppButton(
+            text = "Get Started",
+            onClick = { gotoLogin(navController) },
             modifier = Modifier
                 .width(314.dp)
-                .height(70.dp)
-        ) {
-            Text(text = "Get Started", color = MaterialTheme.colorScheme.secondary)
-        }
+                .height(70.dp),
+            textColor = MaterialTheme.colorScheme.secondary,
+            containerColor = Color.White
+        )
     }
+}
+
+fun gotoLogin(navController: NavController) {
+    val options = NavOptions.Builder().setPopUpTo(Screen.OnBoarding.route, true).build()
+    navController.navigate(Screen.Login.route, options)
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun OnBoardingScreenPreview() {
     MoboStoreTheme {
-        OnBoardingScreen()
+        OnBoardingScreen(rememberNavController())
     }
 }
