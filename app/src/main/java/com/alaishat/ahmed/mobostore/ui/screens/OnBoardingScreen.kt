@@ -3,6 +3,8 @@ package com.alaishat.ahmed.mobostore.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.AppButton
+import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.advancedShadow
@@ -50,27 +53,20 @@ fun OnBoardingScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondary),
+            .background(MaterialTheme.colorScheme.secondary)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-        )
+        VerticalSpacer(height = 70.dp)
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
                 .padding(horizontal = 50.dp),
             text = "Find your Gadget",
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.displayLarge
         )
-        Image(
-            painter = painterResource(id = R.drawable.saly_onboarding),
-            contentDescription = "",
-        )
+        Image(painter = painterResource(id = R.drawable.saly_onboarding), contentDescription = "")
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,12 +77,10 @@ fun OnBoardingScreen(navController: NavHostController) {
         AppButton(
             text = "Get Started",
             onClick = { gotoLogin(navController) },
-            modifier = Modifier
-                .width(314.dp)
-                .height(70.dp),
             textColor = MaterialTheme.colorScheme.secondary,
             containerColor = Color.White
         )
+        VerticalSpacer(height = 100.dp)
     }
 }
 

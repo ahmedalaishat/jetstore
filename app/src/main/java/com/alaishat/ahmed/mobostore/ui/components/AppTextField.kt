@@ -7,14 +7,12 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.*
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
@@ -23,8 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.alaishat.ahmed.mobostore.ui.theme.DividerColor
-import com.alaishat.ahmed.mobostore.ui.theme.TextFieldLabelColor
+import com.alaishat.ahmed.mobostore.ui.theme.OnSurfaceVariant
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -60,7 +57,7 @@ fun AppTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.filledShape,
-    colors: TextFieldColors = appTextFieldColors()
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors()
 ) {
     // If color is not provided via the text style, use content color as a default
     val textColor = textStyle.color.takeOrElse {
@@ -114,10 +111,10 @@ fun AppTextField(
 @Composable
 private fun Label(label: String, labelIconId: Int) {
     Row {
-        Icon(painter = painterResource(id = labelIconId), contentDescription = label, tint = TextFieldLabelColor)
+        Icon(painter = painterResource(id = labelIconId), contentDescription = label, tint = OnSurfaceVariant)
         Text(
             text = label,
-            color = TextFieldLabelColor,
+            color = OnSurfaceVariant,
             modifier = Modifier.padding(start = 10.dp),
             style = MaterialTheme.typography.labelSmall
         )
@@ -131,14 +128,3 @@ fun appTextFieldPadding(
     end: Dp = TextFieldHorPadding,
     bottom: Dp = TextFieldVerPadding
 ): PaddingValues = PaddingValues(start, top, end, bottom)
-
-@ExperimentalMaterial3Api
-@Composable
-fun appTextFieldColors(): TextFieldColors = TextFieldDefaults.textFieldColors(
-    textColor = Color.Black,
-    focusedIndicatorColor = DividerColor,
-    unfocusedIndicatorColor = DividerColor,
-    containerColor = Color.White,
-    cursorColor = TextFieldLabelColor,
-    selectionColors = TextSelectionColors(Color.LightGray, Color.LightGray),
-)

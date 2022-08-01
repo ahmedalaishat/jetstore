@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -20,12 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,9 +33,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.AppButton
+import com.alaishat.ahmed.mobostore.ui.components.AppClickableText
 import com.alaishat.ahmed.mobostore.ui.components.AppTextField
+import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
-import com.alaishat.ahmed.mobostore.ui.theme.White
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
@@ -54,23 +51,20 @@ fun LoginScreen(navController: NavHostController) {
     var password by remember { mutableStateOf("") }
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    val keyboardController = LocalSoftwareKeyboardController.current
+    val passwordTransformation =
+        if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(mask = '*')
 
+    val keyboardController = LocalSoftwareKeyboardController.current
     val ctx = LocalContext.current
+
     val systemUiController = rememberSystemUiController()
-    val color = MaterialTheme.colorScheme.secondary
+    val statusBarColor = MaterialTheme.colorScheme.primary
+    val navigationBarColor = MaterialTheme.colorScheme.surface
     SideEffect {
-        // Update all of the system bar colors to be transparent, and use
-        // dark icons if we're in light theme
-        systemUiController.setStatusBarColor(
-            color = Color(color.toArgb()),
-            darkIcons = false
-        )
-        systemUiController.setNavigationBarColor(
-            color = Color.White,
-            darkIcons = false
-        )
+        systemUiController.setStatusBarColor(color = statusBarColor, darkIcons = false)
+        systemUiController.setNavigationBarColor(color = navigationBarColor, darkIcons = false)
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -81,25 +75,25 @@ fun LoginScreen(navController: NavHostController) {
             contentDescription = "",
         )
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            VerticalSpacer(height = 100.dp)
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(start = 50.dp, end = 50.dp, top = 100.dp, bottom = 60.dp),
+                    .padding(horizontal = 50.dp),
                 text = "Welcome back",
-                color = White,
+                color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.displayLarge
             )
+            VerticalSpacer(height = 60.dp)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .clip(RoundedCornerShape(20.dp, 20.dp))
-                    .background(Color.White),
+                    .background(MaterialTheme.colorScheme.surface),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Column(
@@ -108,87 +102,73 @@ fun LoginScreen(navController: NavHostController) {
                         .padding(horizontal = 50.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
+                    VerticalSpacer(height = 36.dp)
                     Text(
                         text = "Login",
-                        color = Color.Black,
-                        modifier = Modifier
-                            .padding(top = 36.dp)
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                     )
+                    VerticalSpacer(height = 45.dp)
                     AppTextField(
                         value = email,
                         onValueChange = { email = it },
                         label = "Email",
                         labelIconId = R.drawable.ic_email,
-                        modifier = Modifier
-                            .padding(top = 45.dp)
-                            .fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next)
                     )
+                    VerticalSpacer(height = 45.dp)
                     AppTextField(
                         value = password,
                         onValueChange = { password = it },
                         label = "Password",
                         labelIconId = R.drawable.ic_password,
-                        modifier = Modifier
-                            .padding(top = 45.dp)
-                            .fillMaxWidth(),
-                        visualTransformation = if (passwordVisible) VisualTransformation.None
-                        else PasswordVisualTransformation(mask = '*'),
+                        visualTransformation = passwordTransformation,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Go
                         ),
-                        keyboardActions = KeyboardActions(onGo = {
-                            keyboardController?.hide()
-                            login(ctx)
-                        }),
+                        keyboardActions = KeyboardActions(
+                            onGo = {
+                                keyboardController?.hide()
+                                login(ctx)
+                            }),
                         trailingIcon = {
-                            val description = if (passwordVisible) "Hide" else "Show"
-                            ClickableText(
-                                text = AnnotatedString(
-                                    text = description,
-                                    spanStyle = MaterialTheme.typography.labelMedium.toSpanStyle()
-                                        .copy(color = MaterialTheme.colorScheme.secondary)
-                                ),
-                                onClick = { passwordVisible = !passwordVisible },
-                            )
+                            PasswordTrailingIcon(passwordVisible) {
+                                passwordVisible = !passwordVisible
+                            }
                         },
                     )
-                    ClickableText(
-                        text = AnnotatedString(
-                            text = "Forgot password?",
-                            spanStyle = MaterialTheme.typography.labelSmall.toSpanStyle()
-                                .copy(color = MaterialTheme.colorScheme.secondary)
-                        ),
-                        modifier = Modifier.padding(top = 24.dp),
-                        onClick = {
-
-                        },
+                    VerticalSpacer(height = 24.dp)
+                    AppClickableText(
+                        text = "Forgot password?",
+                        onClick = {},
+                        style = MaterialTheme.typography.labelSmall,
                     )
                 }
+                VerticalSpacer(height = 62.dp)
                 AppButton(
-                    modifier = Modifier.padding(top = 62.dp),
                     onClick = {
                         keyboardController?.hide()
                         login(ctx)
                     },
                     text = "Login",
                 )
-                ClickableText(
-                    text = AnnotatedString(
-                        text = "Create account",
-                        spanStyle = MaterialTheme.typography.labelMedium.toSpanStyle()
-                            .copy(color = MaterialTheme.colorScheme.secondary),
-                    ),
-                    onClick = {
-                    },
-                    modifier = Modifier.padding(20.dp)
-                )
+                VerticalSpacer(height = 20.dp)
+                AppClickableText(text = "Create account", onClick = {})
+                VerticalSpacer(height = 20.dp)
             }
         }
     }
+}
+
+@Composable
+private fun PasswordTrailingIcon(passwordVisible: Boolean, onClick: (Int) -> Unit) {
+    val description = if (passwordVisible) "Hide" else "Show"
+    AppClickableText(
+        text = description,
+        onClick = onClick,
+        style = MaterialTheme.typography.labelSmall,
+    )
 }
 
 private fun login(ctx: Context) {
