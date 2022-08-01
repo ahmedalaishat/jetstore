@@ -2,7 +2,6 @@ package com.alaishat.ahmed.mobostore.ui.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.alaishat.ahmed.mobostore.R
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -16,4 +15,5 @@ sealed class Screen(
 ) {
     object OnBoarding : Screen("OnBoarding")
     object Login : Screen("Login")
+    object Home : Screen("Home")
 }

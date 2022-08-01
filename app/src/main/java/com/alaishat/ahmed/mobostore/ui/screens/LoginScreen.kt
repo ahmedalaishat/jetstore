@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -29,13 +30,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.AppButton
 import com.alaishat.ahmed.mobostore.ui.components.AppClickableText
 import com.alaishat.ahmed.mobostore.ui.components.AppTextField
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -128,10 +132,7 @@ fun LoginScreen(navController: NavHostController) {
                             imeAction = ImeAction.Go
                         ),
                         keyboardActions = KeyboardActions(
-                            onGo = {
-                                keyboardController?.hide()
-                                login(ctx)
-                            }),
+                            onGo = { login(ctx, navController, keyboardController) }),
                         trailingIcon = {
                             PasswordTrailingIcon(passwordVisible) {
                                 passwordVisible = !passwordVisible
@@ -147,10 +148,7 @@ fun LoginScreen(navController: NavHostController) {
                 }
                 VerticalSpacer(height = 62.dp)
                 AppButton(
-                    onClick = {
-                        keyboardController?.hide()
-                        login(ctx)
-                    },
+                    onClick = { login(ctx, navController, keyboardController) },
                     text = "Login",
                 )
                 VerticalSpacer(height = 20.dp)
@@ -171,8 +169,16 @@ private fun PasswordTrailingIcon(passwordVisible: Boolean, onClick: (Int) -> Uni
     )
 }
 
-private fun login(ctx: Context) {
+@OptIn(ExperimentalComposeUiApi::class)
+private fun login(ctx: Context, navController: NavController, keyboardController: SoftwareKeyboardController?) {
+    keyboardController?.hide()
     Toast.makeText(ctx, "Logged In", Toast.LENGTH_LONG).show()
+    gotoHome(navController)
+}
+
+fun gotoHome(navController: NavController) {
+    val options = NavOptions.Builder().setPopUpTo(Screen.Login.route, true).build()
+    navController.navigate(Screen.Home.route, options)
 }
 
 @Preview(showBackground = true)

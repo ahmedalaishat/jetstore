@@ -12,7 +12,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,18 +35,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun OnBoardingScreen(navController: NavHostController) {
 //    val ctx = LocalContext.current
+
     val systemUiController = rememberSystemUiController()
-
-    val color = MaterialTheme.colorScheme.secondary
+    val barsColor = MaterialTheme.colorScheme.primary
     SideEffect {
-        // Update all of the system bar colors to be transparent, and use
-        // dark icons if we're in light theme
-        systemUiController.setSystemBarsColor(
-            color = Color(color.toArgb()),
-            darkIcons = false
-        )
-
-        // setStatusBarColor() and setNavigationBarColor() also exist
+        systemUiController.setSystemBarsColor(color = barsColor, darkIcons = false)
     }
 
     Column(
@@ -91,7 +83,7 @@ fun gotoLogin(navController: NavController) {
 
 @Preview(showBackground = true)
 @Composable
-fun OnBoardingScreenPreview() {
+fun OnBoardingPreview() {
     MoboStoreTheme {
         OnBoardingScreen(rememberNavController())
     }
