@@ -4,8 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.108" />
+        <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_basket_selected.xml" value="0.1555" />
         <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_email.xml" value="0.186" />
+        <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_favorite.xml" value="0.1555" />
+        <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_favorite_selected.xml" value="0.1555" />
+        <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_home.xml" value="0.1555" />
+        <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_home_selected.xml" value="0.1555" />
+        <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_home_selector.xml" value="0.186" />
         <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_message.xml" value="0.108" />
+        <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_profile_selected.xml" value="0.1555" />
         <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_saly_19.xml" value="0.129" />
         <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/drawable/ic_saly_onboarding.xml" value="0.186" />
         <entry key="..\:/Users/Ahmed Al-Aishat/Desktop/MoboStore/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.129" />
