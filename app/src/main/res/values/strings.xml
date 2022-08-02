@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Mobo Store</string>
+    <string name="app_name">MoboStore</string>
+    <string name="wearable">Wearable</string>
+    <string name="laptops">Laptops</string>
+    <string name="phones">Phones</string>
+    <string name="drones">Drones</string>
 </resources>

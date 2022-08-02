@@ -73,7 +73,7 @@ internal object AppTypeScaleTokens {
     val TitleLargeLineHeight = 28.0.sp
     val TitleLargeSize = 22.sp
     val TitleLargeTracking = 0.0.sp
-    val TitleLargeWeight = AppTypefaceTokens.WeightRegular
+    val TitleLargeWeight = AppTypefaceTokens.WeightSemiBold
     val TitleMediumFont = AppTypefaceTokens.Plain
     val TitleMediumLineHeight = 24.0.sp
     val TitleMediumSize = 16.sp

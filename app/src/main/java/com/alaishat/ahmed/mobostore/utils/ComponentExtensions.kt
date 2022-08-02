@@ -5,11 +5,16 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
+import com.google.accompanist.pager.PagerScope
+import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import kotlin.math.absoluteValue
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -49,4 +54,30 @@ fun Modifier.advancedShadow(
             paint
         )
     }
+}
+
+fun Modifier.animate(
+    pageOffset: Float,
+    startScale: Dp = 0.8.dp,
+    stopScale: Dp = 1.dp,
+    startAlpha: Dp = 0.8.dp,
+    stopAlpha: Dp = 1.dp,
+) = graphicsLayer {
+
+    // We animate the scaleX + scaleY, between 80% and 100%
+    lerp(
+        start = startScale,
+        stop = stopScale,
+        fraction = 1f - pageOffset.coerceIn(0f, 1f)
+    ).also { scale ->
+        scaleX = scale.value
+        scaleY = scale.value
+    }
+
+    // We animate the alpha, between 75% and 100%
+    alpha = lerp(
+        start = startAlpha,
+        stop = stopAlpha,
+        fraction = 1f - pageOffset.coerceIn(0f, 1f)
+    ).value
 }
