@@ -56,7 +56,7 @@ fun Modifier.advancedShadow(
     }
 }
 
-fun Modifier.animate(
+fun Modifier.animatePage(
     pageOffset: Float,
     startScale: Dp = 0.8.dp,
     stopScale: Dp = 1.dp,
