@@ -43,4 +43,6 @@ sealed class Screen(
         drawableId = R.drawable.ic_basket,
         selectedDrawableId = R.drawable.ic_basket_selected
     )
+
+    object Search : Screen("Search")
 }

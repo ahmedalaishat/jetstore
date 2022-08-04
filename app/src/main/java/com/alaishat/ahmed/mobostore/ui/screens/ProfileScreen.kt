@@ -23,19 +23,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
  * Mobo Store Project.
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavHostController) {
-//    val ctx = LocalContext.current
-
-    var search by remember { mutableStateOf("") }
-
-    val systemUiController = rememberSystemUiController()
-    val barsColor = MaterialTheme.colorScheme.background
-    SideEffect {
-        systemUiController.setSystemBarsColor(color = barsColor, darkIcons = true)
-    }
 
     Column(
         modifier = Modifier
@@ -59,6 +48,6 @@ fun ProfileScreen(navController: NavHostController) {
 @Composable
 fun ProfilePreview() {
     MoboStoreTheme {
-        HomeScreen(rememberNavController())
+        ProfileScreen(rememberNavController())
     }
 }

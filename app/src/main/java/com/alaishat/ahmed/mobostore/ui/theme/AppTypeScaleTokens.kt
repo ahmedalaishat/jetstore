@@ -48,7 +48,7 @@ internal object AppTypeScaleTokens {
     val HeadlineMediumLineHeight = 36.0.sp
     val HeadlineMediumSize = 28.sp
     val HeadlineMediumTracking = 0.0.sp
-    val HeadlineMediumWeight = AppTypefaceTokens.WeightRegular
+    val HeadlineMediumWeight = AppTypefaceTokens.WeightSemiBold
     val HeadlineSmallFont = AppTypefaceTokens.Brand
     val HeadlineSmallLineHeight = 32.0.sp
     val HeadlineSmallSize = 24.sp

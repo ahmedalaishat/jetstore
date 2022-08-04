@@ -1,5 +1,9 @@
 package com.alaishat.ahmed.mobostore.utils
 
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
@@ -21,6 +25,17 @@ import kotlin.math.absoluteValue
  * Mobo Store Project.
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
+fun LazyGridScope.header(
+    content: @Composable LazyGridItemScope.() -> Unit
+) {
+    item(key = "header", span = { GridItemSpan(this.maxLineSpan) }, content = content)
+}
+
+fun LazyGridScope.footer(
+    content: @Composable LazyGridItemScope.() -> Unit
+) {
+    item(key = "footer", span = { GridItemSpan(this.maxLineSpan) }, content = content)
+}
 
 fun Modifier.advancedShadow(
     color: Color = Color.Black,

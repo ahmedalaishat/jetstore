@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,7 +40,8 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.Home.route) { HomeScreen(navController) }
                         composable(Screen.Favorites.route) { FavoritesScreen(navController) }
                         composable(Screen.Profile.route) { ProfileScreen(navController) }
-                        composable(Screen.Basket.route) { BascketScreen(navController) }
+                        composable(Screen.Basket.route) { BasketScreen(navController) }
+                        composable(Screen.Search.route) { SearchScreen(navController) }
                     }
                 }
             }
