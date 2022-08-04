@@ -19,10 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
-import com.alaishat.ahmed.mobostore.ui.components.Product
-import com.alaishat.ahmed.mobostore.ui.components.SearchField
-import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.*
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.header
 
@@ -48,7 +45,7 @@ fun SearchScreen(navController: NavHostController) {
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            val count = 0
+            val count = 5
             header {
                 SearchHeader(navController, search, { search = it }, count)
             }
@@ -111,26 +108,12 @@ private fun SearchHeader(
 
 @Composable
 private fun NoItems() {
-    Column(
-        Modifier
-            .fillMaxHeight()
-            .padding(horizontal = 35.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(painter = painterResource(id = R.drawable.saly_no_items), contentDescription = null)
-        Text(
-            text = "Item not found",
-            style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center
-        )
-        VerticalSpacer(height = 20.dp)
-        Text(
-            text = "Try a more generic search term or try looking for alternative products.",
-            style = MaterialTheme.typography.labelMedium,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
+    EmptyItems(
+        imageId = R.drawable.sally_no_items,
+        titleText = "Item not found",
+        descriptionText = "Try a more generic search term or try\n" +
+                "looking for alternative products.",
+    )
 }
 
 @Preview(showBackground = true)
