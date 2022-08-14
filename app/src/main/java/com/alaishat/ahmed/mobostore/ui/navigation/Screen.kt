@@ -13,10 +13,11 @@ sealed class Screen(
     val route: String,
     @StringRes val resourceId: Int? = null,
     @DrawableRes val drawableId: Int? = null,
-    @DrawableRes val selectedDrawableId: Int? = null
+    @DrawableRes val selectedDrawableId: Int? = null,
+    val bottomBarVisible: Boolean = true,
 ) {
-    object OnBoarding : Screen("OnBoarding")
-    object Login : Screen("Login")
+    object OnBoarding : Screen(route = "OnBoarding", bottomBarVisible = false)
+    object Login : Screen(route = "Login", bottomBarVisible = false)
 
     object Home : Screen(
         "Home",
@@ -45,4 +46,10 @@ sealed class Screen(
     )
 
     object Search : Screen("Search")
+    object OrderHistory : Screen("OrderHistory")
+    object NoConnection : Screen("NoConnection")
+
+    companion object {
+        fun shouldBottomBarHidden(route: String?) = route == OnBoarding.route || route == Login.route
+    }
 }

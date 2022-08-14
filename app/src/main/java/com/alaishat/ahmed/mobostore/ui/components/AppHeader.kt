@@ -34,7 +34,7 @@ fun AppHeader(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 12.dp)
     ) {

@@ -1,6 +1,7 @@
 package com.alaishat.ahmed.mobostore.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -28,12 +29,10 @@ fun EmptyItems(
     onClickButton: (() -> Unit)? = null,
 ) {
     Column(
-        Modifier
-            .fillMaxHeight()
-            .padding(horizontal = 35.dp),
+        Modifier.padding(horizontal = 35.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(painter = painterResource(id = R.drawable.sally_no_items), contentDescription = null)
+        Image(painter = painterResource(id = imageId), contentDescription = null)
         Text(
             text = titleText,
             style = MaterialTheme.typography.headlineMedium,

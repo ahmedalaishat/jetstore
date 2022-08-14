@@ -72,7 +72,7 @@ fun LoginScreen(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         Image(
             painter = painterResource(id = R.drawable.login),

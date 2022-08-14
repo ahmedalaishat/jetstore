@@ -45,7 +45,7 @@ fun OnBoardingScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(MaterialTheme.colorScheme.primary)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -69,8 +69,8 @@ fun OnBoardingScreen(navController: NavHostController) {
         AppButton(
             text = "Get Started",
             onClick = { gotoLogin(navController) },
-            textColor = MaterialTheme.colorScheme.secondary,
-            containerColor = Color.White
+            textColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.onPrimary
         )
         VerticalSpacer(height = 100.dp)
     }

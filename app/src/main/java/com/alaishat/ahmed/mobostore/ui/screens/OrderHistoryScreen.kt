@@ -20,12 +20,12 @@ import com.alaishat.ahmed.mobostore.ui.components.Product
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
 /**
- * Created by Ahmed Al-Aishat on Aug/01/2022.
+ * Created by Ahmed Al-Aishat on Aug/04/2022.
  * Mobo Store Project.
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
-fun FavoritesScreen(navController: NavHostController) {
+fun HistoryScreen(navController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -33,7 +33,7 @@ fun FavoritesScreen(navController: NavHostController) {
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AppHeader("Favorites", onClickLeftIcon = { navController.popBackStack() })
+        AppHeader("Order History", onClickLeftIcon = { navController.popBackStack() })
         LazyVerticalGrid(
             modifier = Modifier.fillMaxHeight(),
             contentPadding = PaddingValues(vertical = 20.dp),
@@ -46,16 +46,16 @@ fun FavoritesScreen(navController: NavHostController) {
                 Product(Modifier.padding(top = offset, start = 35.dp, end = 35.dp))
             }
             if (count == 0)
-                item(span = { GridItemSpan(this.maxLineSpan) }, content = { NoFavorites() })
+                item(span = { GridItemSpan(this.maxLineSpan) }, content = { NoHistory() })
         }
     }
 }
 
 @Composable
-private fun NoFavorites() {
+private fun NoHistory() {
     EmptyItems(
-        imageId = R.drawable.sally_no_favorites,
-        titleText = "No favorites yet",
+        imageId = R.drawable.saly_not_history,
+        titleText = "No history yet",
         descriptionText = "Hit the orange button down\n" +
                 "below to Create an order",
         buttonText = "Start ordering",
@@ -65,8 +65,8 @@ private fun NoFavorites() {
 
 @Preview(showBackground = true)
 @Composable
-fun FavoritesPreview() {
+fun HistoryPreview() {
     MoboStoreTheme {
-        FavoritesScreen(rememberNavController())
+        HistoryScreen(rememberNavController())
     }
 }
