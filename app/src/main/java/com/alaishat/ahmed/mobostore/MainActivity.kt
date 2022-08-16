@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -26,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            val loggedIn = false // AHMED_TODO check if the user is logged in
+            val loggedIn = true // AHMED_TODO check if the user is logged in
             val startDestination = if (loggedIn) Screen.Home.route else Screen.OnBoarding.route
             val bottomBarState = rememberSaveable { (mutableStateOf(loggedIn)) }
 
@@ -43,24 +46,26 @@ class MainActivity : ComponentActivity() {
 
 
             MoboStoreTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = { BottomBar(navController = navController, bottomBarState) }
-                ) { innerPadding ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = startDestination,
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable(Screen.OnBoarding.route) { OnBoardingScreen(navController) }
-                        composable(Screen.Login.route) { LoginScreen(navController) }
-                        composable(Screen.Home.route) { HomeScreen(navController) }
-                        composable(Screen.Favorites.route) { FavoritesScreen(navController) }
-                        composable(Screen.Profile.route) { ProfileScreen(navController) }
-                        composable(Screen.Basket.route) { BasketScreen(navController) }
-                        composable(Screen.Search.route) { SearchScreen(navController) }
-                        composable(Screen.OrderHistory.route) { HistoryScreen(navController) }
-                        composable(Screen.NoConnection.route) { NoConnectionScreen(navController) }
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomBar = { BottomBar(navController = navController, bottomBarState) }
+                    ) { innerPadding ->
+                        NavHost(
+                            navController = navController,
+                            startDestination = startDestination,
+                            modifier = Modifier.padding(innerPadding)
+                        ) {
+                            composable(Screen.OnBoarding.route) { OnBoardingScreen(navController) }
+                            composable(Screen.Login.route) { LoginScreen(navController) }
+                            composable(Screen.Home.route) { HomeScreen(navController) }
+                            composable(Screen.Favorites.route) { FavoritesScreen(navController) }
+                            composable(Screen.Profile.route) { ProfileScreen(navController) }
+                            composable(Screen.Basket.route) { BasketScreen(navController) }
+                            composable(Screen.Search.route) { SearchScreen(navController) }
+                            composable(Screen.OrderHistory.route) { HistoryScreen(navController) }
+                            composable(Screen.NoConnection.route) { NoConnectionScreen(navController) }
+                        }
                     }
                 }
             }

@@ -45,6 +45,7 @@ sealed class Screen(
         selectedDrawableId = R.drawable.ic_basket_selected
     )
 
+    object Checkout : Screen("Checkout")
     object Search : Screen("Search")
     object OrderHistory : Screen("OrderHistory")
     object NoConnection : Screen("NoConnection")

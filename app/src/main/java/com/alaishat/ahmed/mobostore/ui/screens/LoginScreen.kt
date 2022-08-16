@@ -176,7 +176,7 @@ private fun login(ctx: Context, navController: NavController, keyboardController
     gotoHome(navController)
 }
 
-fun gotoHome(navController: NavController) {
+private fun gotoHome(navController: NavController) {
     val options = NavOptions.Builder().setPopUpTo(Screen.Login.route, true).build()
     navController.navigate(Screen.Home.route, options)
 }
