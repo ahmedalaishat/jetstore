@@ -1,7 +1,7 @@
 package com.alaishat.ahmed.mobostore.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,7 +25,8 @@ fun AppButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.primary,
-    textColor: Color = MaterialTheme.colorScheme.onPrimary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    loading: Boolean = false
 ) {
     Box(modifier = modifier) {
         Button(
@@ -33,15 +34,25 @@ fun AppButton(
             modifier = Modifier
                 .width(314.dp)
                 .height(70.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = containerColor),
-            shape = RoundedCornerShape(12.dp)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = containerColor,
+                disabledContainerColor = containerColor.copy(alpha = 0.7f)
+            ),
+            shape = RoundedCornerShape(12.dp),
+            enabled = !loading
         ) {
-            Text(
-                text = text,
-                modifier = Modifier.background(containerColor),
-                color = textColor,
-                style = MaterialTheme.typography.labelLarge
-            )
+            if (loading)
+                BallPulseSyncIndicator(
+                    modifier = Modifier.absoluteOffset(0.dp, 0.dp),
+                    ballsColor = contentColor,
+                    ballSize = 8.dp
+                )
+            else
+                Text(
+                    text = text,
+                    color = contentColor,
+                    style = MaterialTheme.typography.labelLarge
+                )
         }
     }
 }

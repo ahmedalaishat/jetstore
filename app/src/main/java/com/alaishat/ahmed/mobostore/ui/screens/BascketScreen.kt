@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,7 +70,14 @@ fun BasketScreen(navController: NavHostController) {
                     HorizontalSpacer(width = 4.dp)
                     Text(
                         text = "Delivery for FREE until the end of the month",
-                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontSize = 10.sp,
+                            shadow = Shadow(
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                                offset = Offset(0.0f, 10.0f),
+                                blurRadius = 10f
+                            )
+                        ),
                     )
                 }
             }
@@ -79,9 +88,10 @@ fun BasketScreen(navController: NavHostController) {
 
             item {
                 Column(
-                    Modifier.padding(horizontal = 50.dp, vertical = 20.dp),
+                    Modifier.padding(horizontal = 50.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    VerticalSpacer(height = 20.dp)
                     Row {
                         Text(
                             modifier = Modifier.weight(1f),
@@ -112,7 +122,7 @@ fun BasketScreen(navController: NavHostController) {
 }
 
 
-fun gotoCheckout(navController: NavController) {
+private fun gotoCheckout(navController: NavController) {
     navController.navigate(Screen.Checkout.route)
 }
 

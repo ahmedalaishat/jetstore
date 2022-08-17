@@ -1,9 +1,7 @@
 package com.alaishat.ahmed.mobostore.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.alaishat.ahmed.mobostore.R
 
 /**
  * Created by Ahmed Al-Aishat on Aug/04/2022.
@@ -53,7 +50,7 @@ fun EmptyItems(
                 text = buttonText,
                 onClick = onClickButton,
                 containerColor = MaterialTheme.colorScheme.secondary,
-                textColor = MaterialTheme.colorScheme.onSecondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary,
             )
         }
     }

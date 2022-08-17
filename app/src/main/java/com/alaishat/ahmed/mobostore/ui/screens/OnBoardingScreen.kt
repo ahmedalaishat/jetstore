@@ -69,7 +69,7 @@ fun OnBoardingScreen(navController: NavHostController) {
         AppButton(
             text = "Get Started",
             onClick = { gotoLogin(navController) },
-            textColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.onPrimary
         )
         VerticalSpacer(height = 100.dp)
