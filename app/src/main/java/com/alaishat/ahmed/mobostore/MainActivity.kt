@@ -87,6 +87,7 @@ class MainActivity : ComponentActivity() {
                                         modalBottomSheetState
                                     )
                                 }
+                                composable(Screen.SingleItem.route) { SingleItemScreen(navController) }
                                 composable(Screen.Search.route) { SearchScreen(navController) }
                                 composable(Screen.OrderHistory.route) { HistoryScreen(navController) }
                                 composable(Screen.NoConnection.route) { NoConnectionScreen(navController) }

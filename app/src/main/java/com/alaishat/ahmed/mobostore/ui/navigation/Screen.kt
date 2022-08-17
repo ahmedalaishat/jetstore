@@ -46,6 +46,7 @@ sealed class Screen(
     )
 
     object Checkout : Screen("Checkout")
+    object SingleItem : Screen("SingleItem")
     object Search : Screen("Search")
     object OrderHistory : Screen("OrderHistory")
     object NoConnection : Screen("NoConnection")

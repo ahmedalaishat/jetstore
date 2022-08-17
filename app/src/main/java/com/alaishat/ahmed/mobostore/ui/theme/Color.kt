@@ -7,5 +7,6 @@ val Secondary = Color(0xFF58C0EA)
 val OnSurfaceVariant = Color(0xFF868686)
 val Background = Color(0xFFE5E5E5)
 val Outline = Color(0xFF868686)
+val OutlineVariant = Color(0xFFE3E3E3)
 
 val Pink80 = Color(0xFFEFB8C8)

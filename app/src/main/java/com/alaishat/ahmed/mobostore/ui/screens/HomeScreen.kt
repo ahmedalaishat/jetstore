@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
@@ -88,7 +89,7 @@ fun HomeScreen(navController: NavHostController) {
                 .padding(start = 24.dp)
         )
         VerticalSpacer(height = 55.dp)
-        HomePager()
+        HomePager(navController)
 
         Box(
             modifier = Modifier
@@ -115,7 +116,7 @@ fun HomeScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun HomePager() {
+private fun HomePager(navController: NavController) {
     val tabs = listOf(
         HomeTab.Wearable,
         HomeTab.Laptops,
@@ -148,13 +149,13 @@ private fun HomePager() {
     }
 
     HorizontalPager(count = tabs.size, state = pagerState, userScrollEnabled = false) { tab ->
-        HomeTabContent(tabs[tab])
+        HomeTabContent(tabs[tab], navController = navController)
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun HomeTabContent(homeTab: HomeTab) {
+private fun HomeTabContent(homeTab: HomeTab, navController: NavController) {
     HorizontalPager(
         modifier = Modifier.padding(top = 50.dp),
         count = 5, // AHMED_TODO call api to get items depending on the current tab
@@ -164,7 +165,7 @@ private fun HomeTabContent(homeTab: HomeTab) {
         // scroll position. We use the absolute value which allows us to mirror
         // any effects for both directions
         val pageOffset = calculateCurrentOffsetForPage(item).absoluteValue
-        Product(modifier = Modifier.animatePage(pageOffset))
+        Product(modifier = Modifier.animatePage(pageOffset)) { navController.navigate(Screen.SingleItem.route) }
     }
 }
 
