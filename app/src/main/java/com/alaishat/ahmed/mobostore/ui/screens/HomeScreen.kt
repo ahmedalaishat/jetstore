@@ -1,5 +1,6 @@
 package com.alaishat.ahmed.mobostore.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +45,8 @@ fun HomeScreen(navController: NavHostController) {
 
     var search by remember { mutableStateOf("") }
 
+    val context = LocalContext.current
+
     val systemUiController = rememberSystemUiController()
     val barsColor = MaterialTheme.colorScheme.background
     SideEffect {
@@ -68,7 +72,7 @@ fun HomeScreen(navController: NavHostController) {
                     .clickable(
                         interactionSource = MutableInteractionSource(),
                         indication = rememberRipple(bounded = true, radius = 24.dp),
-                        onClick = { navController.navigate(Screen.Search.route) })
+                        onClick = { })
                     .padding(horizontal = 12.dp)
             )
             HorizontalSpacer(width = 12.dp)
@@ -78,6 +82,8 @@ fun HomeScreen(navController: NavHostController) {
                 modifier = Modifier
                     .padding(end = 50.dp)
                     .fillMaxWidth(),
+                enabled = false,
+                onClick = { navController.navigate(Screen.Search.route) }
             )
         }
         VerticalSpacer(height = 55.dp)
@@ -165,7 +171,10 @@ private fun HomeTabContent(homeTab: HomeTab, navController: NavController) {
         // scroll position. We use the absolute value which allows us to mirror
         // any effects for both directions
         val pageOffset = calculateCurrentOffsetForPage(item).absoluteValue
-        Product(modifier = Modifier.animatePage(pageOffset)) { navController.navigate(Screen.SingleItem.route) }
+        Product(
+            modifier = Modifier.animatePage(pageOffset),
+            onProductClicked = { navController.navigate(Screen.SingleItem.route) },
+        )
     }
 }
 

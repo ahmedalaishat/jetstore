@@ -1,6 +1,8 @@
 package com.alaishat.ahmed.mobostore.ui.screens
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -12,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +35,7 @@ import com.alaishat.ahmed.mobostore.utils.header
 fun SearchScreen(navController: NavHostController) {
 
     var search by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         modifier = Modifier
@@ -39,23 +43,39 @@ fun SearchScreen(navController: NavHostController) {
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val count = 5
+        SearchHeader(navController, search, { search = it }, focusRequester)
         LazyVerticalGrid(
-            modifier = Modifier.fillMaxHeight(),
-            contentPadding = PaddingValues(vertical = 20.dp),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(vertical = 20.dp, horizontal = 24.dp),
             columns = GridCells.Fixed(2),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(35.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            val count = 5
             header {
-                SearchHeader(navController, search, { search = it }, count)
+                if (count > 0)
+                    Text(
+                        text = "Found  $count results",
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.padding(vertical = 10.dp),
+                        textAlign = TextAlign.Center
+                    )
             }
             items(count) { item ->
-                val offset = if (item % 2 == 0) 0.dp else 50.dp
-                Product(Modifier.padding(top = offset, start = 35.dp, end = 35.dp))
+//                val offset = if (item % 2 == 0) 0.dp else 50.dp
+                val absOffset = if (item % 2 == 0) 0.dp else 40.dp
+                Product(
+                    modifier = Modifier.absoluteOffset(0.dp, absOffset),
+                    showSecondaryText = false,
+                )
             }
             if (count == 0)
                 item(span = { GridItemSpan(this.maxLineSpan) }, content = { NoItems() })
         }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 }
 
@@ -64,14 +84,15 @@ private fun SearchHeader(
     navController: NavHostController,
     search: String,
     onSearch: (String) -> Unit,
-    count: Int
+    focusRequester: FocusRequester = FocusRequester()
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        VerticalSpacer(height = 20.dp)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(start = 12.dp)
@@ -94,15 +115,9 @@ private fun SearchHeader(
                 modifier = Modifier
                     .padding(end = 50.dp)
                     .fillMaxWidth(),
+                focusRequester = focusRequester
             )
         }
-        if (count > 0)
-            Text(
-                text = "Found  6 results",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(vertical = 10.dp),
-                textAlign = TextAlign.Center
-            )
     }
 }
 
