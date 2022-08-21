@@ -1,6 +1,5 @@
 package com.alaishat.ahmed.mobostore.ui.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -9,8 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +28,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -40,18 +36,11 @@ import kotlin.math.absoluteValue
  * Mobo Store Project.
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, openDrawer: () -> Any) {
 
     var search by remember { mutableStateOf("") }
-
-    val context = LocalContext.current
-
-    val systemUiController = rememberSystemUiController()
-    val barsColor = MaterialTheme.colorScheme.background
-    SideEffect {
-        systemUiController.setSystemBarsColor(color = barsColor, darkIcons = true)
-    }
 
     Column(
         modifier = Modifier
@@ -60,7 +49,7 @@ fun HomeScreen(navController: NavHostController) {
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        VerticalSpacer(height = 20.dp)
+        VerticalSpacer(height = 10.dp)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(start = 12.dp)
@@ -72,7 +61,7 @@ fun HomeScreen(navController: NavHostController) {
                     .clickable(
                         interactionSource = MutableInteractionSource(),
                         indication = rememberRipple(bounded = true, radius = 24.dp),
-                        onClick = { })
+                        onClick = { openDrawer() })
                     .padding(horizontal = 12.dp)
             )
             HorizontalSpacer(width = 12.dp)
@@ -182,6 +171,6 @@ private fun HomeTabContent(homeTab: HomeTab, navController: NavController) {
 @Composable
 fun HomePreview() {
     MoboStoreTheme {
-        HomeScreen(rememberNavController())
+        HomeScreen(rememberNavController()) { }
     }
 }

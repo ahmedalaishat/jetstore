@@ -11,9 +11,10 @@ import com.alaishat.ahmed.mobostore.R
  */
 sealed class Screen(
     val route: String,
+    val name: String = route,
     @StringRes val resourceId: Int? = null,
     @DrawableRes val drawableId: Int? = null,
-    @DrawableRes val selectedDrawableId: Int? = null,
+    @DrawableRes val selectedDrawableId: Int? = drawableId,
     val bottomBarVisible: Boolean = true,
 ) {
     object OnBoarding : Screen(route = "OnBoarding", bottomBarVisible = false)
@@ -41,8 +42,19 @@ sealed class Screen(
 
     object Basket : Screen(
         "Basket",
+        name = "My orders",
         drawableId = R.drawable.ic_basket,
         selectedDrawableId = R.drawable.ic_basket_selected
+    )
+
+    object Delivery : Screen(
+        route = "Delivery",
+        drawableId = R.drawable.ic_bag,
+    )
+
+    object Settings : Screen(
+        route = "Settings",
+        drawableId = R.drawable.ic_setting,
     )
 
     object Checkout : Screen("Checkout")
@@ -53,5 +65,22 @@ sealed class Screen(
 
     companion object {
         fun shouldBottomBarHidden(route: String?) = route == OnBoarding.route || route == Login.route
+
+        fun bottomBarScreens() = listOf(
+            Home,
+            Favorites,
+            Profile,
+            Basket,
+        )
+
+        fun drawerMenuScreens() = listOf(
+            Profile,
+            Basket,
+            Favorites,
+            Delivery,
+            Settings,
+        )
+
+        fun isLoginStack(route: String?) = route == OnBoarding.route || route == Login.route
     }
 }

@@ -75,7 +75,7 @@ fun LoginScreen(navController: NavHostController) {
             .background(MaterialTheme.colorScheme.primary)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.login),
+            painter = painterResource(id = R.drawable.bg_login),
             contentDescription = "",
         )
         Column(

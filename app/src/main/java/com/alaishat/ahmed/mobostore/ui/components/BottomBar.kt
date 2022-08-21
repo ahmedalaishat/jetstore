@@ -13,6 +13,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
+import com.alaishat.ahmed.mobostore.utils.bottomBarNavigate
 
 /**
  * Created by Ahmed Al-Aishat on Aug/01/2022.
@@ -20,15 +21,13 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
-fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean>) {
+fun BottomBar(
+    navController: NavController,
+    bottomBarState: MutableState<Boolean>,
+) {
     if (!bottomBarState.value) return
 
-    val items = listOf(
-        Screen.Home,
-        Screen.Favorites,
-        Screen.Profile,
-        Screen.Basket,
-    )
+    val items = Screen.bottomBarScreens()
 
     AnimatedVisibility(
         visible = bottomBarState.value,
@@ -54,24 +53,7 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
 //                label = { Text(stringResource(screen.resourceId)) },
                         selected = selected,
                         onClick = {
-                            navController.navigate(screen.route) {
-                                val navigationRoutes = items.map(Screen::route)
-                                val firstBottomBarDestination = navController.backQueue
-                                    .firstOrNull { navigationRoutes.contains(it.destination.route) }?.destination
-                                // remove all navigation items from the stack
-                                // so only the currently selected screen remains in the stack
-                                if (firstBottomBarDestination != null) {
-                                    popUpTo(firstBottomBarDestination.id) {
-//                                        inclusive = true
-                                        saveState = true
-                                    }
-                                }
-                                // Avoid multiple copies of the same destination when
-                                // reselecting the same item
-                                launchSingleTop = true
-                                // Restore state when reselecting a previously selected item
-                                restoreState = true
-                            }
+                            navController.bottomBarNavigate(screen.route)
                         },
 //                modifier = Modifier.background(MaterialTheme.colorScheme.background),
                         colors = NavigationBarItemDefaults.colors(
