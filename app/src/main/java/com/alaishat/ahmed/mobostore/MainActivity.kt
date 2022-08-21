@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.ui.components.BottomBar
@@ -36,6 +37,7 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.advancedShadow
 import com.alaishat.ahmed.mobostore.utils.animateClose
 import com.alaishat.ahmed.mobostore.utils.animateOpen
+import com.alaishat.ahmed.mobostore.utils.barsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
@@ -43,55 +45,42 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             val navController = rememberNavController()
-            val loggedIn = true // AHMED_TODO check if the user is logged in
-            val startDestination = if (loggedIn) Screen.Home.route else Screen.OnBoarding.route
-            val bottomBarState = rememberSaveable { (mutableStateOf(loggedIn)) }
-
-
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-//            val currentRoute = navBackStackEntry?.destination?.route
-//            val isLoginStack = currentRoute == Screen.OnBoarding.route || currentRoute == Screen.Login.route
-//            bottomBarState.value = !isLoginStack
-            bottomBarState.value = when (navBackStackEntry?.destination?.route) {
-                Screen.Home.route, Screen.Favorites.route,
-                Screen.Profile.route, Screen.Basket.route -> true
-                else -> false
-            }
-
             val scope = rememberCoroutineScope()
+            val systemUiController = rememberSystemUiController()
             val configuration = LocalConfiguration.current
-
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
 
             val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
+            var loggedIn by remember { mutableStateOf(true) } // AHMED_TODO check if the user is logged in
+            val showBottomBar = rememberSaveable { (mutableStateOf(loggedIn)) }
+            var drawerInitOffset by remember { mutableStateOf(0f) }
+
+            showBottomBar.value = Screen.isBottomBarScreen(currentRoute)
+            val scaffoldPadding = if (!loggedIn) PaddingValues() else WindowInsets.barsPadding
+
+            val offsetRatio = if (drawerInitOffset == 0f) 0f
+            else (drawerInitOffset - drawerState.offset.value) / drawerInitOffset
+            val scaffoldRadius = Dp(32 * offsetRatio)
+            val scaffoldScale = 1f - offsetRatio * .35f
+            val scaffoldOffset = (offsetRatio * configuration.screenWidthDp * .8f)
+
+            SideEffect {
+                val darkIcons = offsetRatio < .1f && !Screen.isLoginScreen(currentRoute)
+                systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = darkIcons)
+            }
+
             val openDrawer = { scope.launch { drawerState.animateOpen() } }
             val closeDrawer = { scope.launch { drawerState.animateClose() } }
-
-            var drawerOffset by remember { mutableStateOf(0f) }
+            val login = { loggedIn = true }
+            val logout = { loggedIn = false }
 
             MoboStoreTheme {
-                // AHMED_TODO refactor us
-                val systemUiController = rememberSystemUiController()
-                val barsColor = MaterialTheme.colorScheme.background
-                val primaryColor = MaterialTheme.colorScheme.primary
-
-                val offset = if (drawerOffset != 0f) drawerState.offset.value - drawerOffset else 0f
-
-                val color =
-                    if (offset > 1 || Screen.isLoginStack(navBackStackEntry?.destination?.route)) primaryColor
-                    else if (modalBottomSheetState.targetValue != ModalBottomSheetValue.Hidden) Color(0xFf9B9B9B)
-                    else barsColor
-                val darkIcons = color != primaryColor
-
-                SideEffect {
-                    systemUiController.setSystemBarsColor(color = color, darkIcons = darkIcons)
-                }
-                // AHMED_TODO refactor us
-
-
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                     // AHMED_TODO move me to payment screen
                     ModalBottomSheetLayout(
@@ -102,27 +91,16 @@ class MainActivity : ComponentActivity() {
                         ModalNavigationDrawer(
                             drawerState = drawerState,
                             drawerContent = {
-                                DrawerContent(navController, closeDrawer)
+                                DrawerContent(navController, closeDrawer, logout)
                             },
                             drawerContainerColor = Color.Transparent,
                             scrimColor = Color.Transparent,
                             gesturesEnabled = drawerState.isOpen,
                             drawerContentColor = MaterialTheme.colorScheme.onPrimary,
                         ) {
-                            // AHMED_TODO refactor us
-                            val rad =
-                                if (drawerOffset != 0f) Dp((((drawerOffset - drawerState.offset.value) / drawerOffset)) * 32) else 0.dp
-                            val scale =
-                                if (drawerOffset != 0f) (drawerState.offset.value * 0.35f) / (drawerOffset) + .65f else 0f
-//                            val offset = Dp((drawerState.offset.value - drawerWidth) / 3.5f)
-                            val ratio = (drawerOffset - drawerState.offset.value) / (drawerOffset)
-                            val scaffoldOffset =
-                                if (ratio != Float.POSITIVE_INFINITY && ratio != Float.NEGATIVE_INFINITY)
-                                    (ratio * 0.9f * configuration.screenWidthDp) - (ratio * configuration.screenWidthDp * 0.1f) else 0f
-                            // AHMED_TODO refactor us
-
-                            if (drawerOffset != 0f)
+                            if (drawerInitOffset != 0f)
                                 Image(
+                                    modifier = Modifier.fillMaxSize(),
                                     painter = painterResource(id = R.drawable.bg_menu),
                                     contentDescription = null,
                                     contentScale = ContentScale.FillBounds
@@ -130,21 +108,26 @@ class MainActivity : ComponentActivity() {
                             Scaffold(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .scale(scale)
+                                    .scale(scaffoldScale)
                                     .absoluteOffset(x = scaffoldOffset.dp)
-                                    .advancedShadow(Color.White, 0.1f, rad, 1.dp, 24.dp, (-24).dp)
-                                    .clip(RoundedCornerShape(rad)),
+                                    .advancedShadow(Color.White, 0.1f, scaffoldRadius, 1.dp, 24.dp, (-24).dp)
+                                    .clip(RoundedCornerShape(scaffoldRadius))
+                                    .background(MaterialTheme.colorScheme.background)
+                                    .padding(scaffoldPadding),
                                 bottomBar = {
-                                    BottomBar(navController = navController, bottomBarState)
+                                    BottomBar(navController = navController, showBottomBar)
                                 },
+                                containerColor = MaterialTheme.colorScheme.background,
+//                                contentColor =
                             ) { innerPadding ->
                                 AppNavHost(
                                     navController = navController,
                                     modalBottomSheetState = modalBottomSheetState,
                                     openDrawer = openDrawer,
+                                    login = login,
                                     scope = scope,
-                                    startDestination = startDestination,
-                                    innerPadding = innerPadding
+                                    startDestination = Screen.getStartDestination(loggedIn).route,
+                                    innerPadding = innerPadding,
                                 )
                             }
                         }
@@ -152,7 +135,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             LaunchedEffect(Unit) {
-                drawerOffset = drawerState.offset.value
+                drawerInitOffset = drawerState.offset.value
             }
         }
     }

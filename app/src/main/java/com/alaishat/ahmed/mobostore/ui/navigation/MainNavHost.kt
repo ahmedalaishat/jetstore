@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,17 +23,21 @@ fun AppNavHost(
     navController: NavHostController,
     modalBottomSheetState: ModalBottomSheetState,
     openDrawer: () -> Any,
+    login: () -> Any,
     scope: CoroutineScope,
     startDestination: String,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+//    windowPadding: PaddingValues,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = androidx.compose.ui.Modifier.padding(innerPadding),
+        modifier = Modifier
+            .padding(innerPadding),
+//            .padding(windowPadding),
     ) {
         composable(Screen.OnBoarding.route) { OnBoardingScreen(navController) }
-        composable(Screen.Login.route) { LoginScreen(navController) }
+        composable(Screen.Login.route) { LoginScreen(navController, login) }
         composable(Screen.Home.route) { HomeScreen(navController, openDrawer) }
         composable(Screen.Favorites.route) { FavoritesScreen(navController) }
         composable(Screen.Profile.route) { ProfileScreen(navController) }

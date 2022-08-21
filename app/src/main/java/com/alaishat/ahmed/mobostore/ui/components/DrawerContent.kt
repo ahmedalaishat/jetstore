@@ -32,6 +32,7 @@ import com.alaishat.ahmed.mobostore.utils.silentClickable
 fun DrawerContent(
     navController: NavController,
     closeDrawer: () -> Any,
+    logout: () -> Any,
     menuItems: List<Screen> = Screen.drawerMenuScreens(),
     background: Color = Color.Transparent,
     width: Dp = 250.dp,
@@ -71,7 +72,8 @@ fun DrawerContent(
                 Row(
                     Modifier
                         .clickable {
-                            logout(navController)
+                            logout()
+                            navigate(navController)
                             closeDrawer()
                         }
                         .padding(horizontal = 30.dp, vertical = 15.dp),
@@ -91,7 +93,7 @@ fun DrawerContent(
     }
 }
 
-fun logout(navController: NavController) {
+fun navigate(navController: NavController) {
     val opt = NavOptions
         .Builder()
         .setPopUpTo(Screen.Home.route, true)
@@ -102,6 +104,6 @@ fun logout(navController: NavController) {
 @Composable
 fun DrawerContentPreview() {
     MoboStoreTheme {
-        DrawerContent(navController = rememberNavController(), closeDrawer = { })
+        DrawerContent(navController = rememberNavController(), closeDrawer = { }, logout = {})
     }
 }

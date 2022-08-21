@@ -36,11 +36,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun OnBoardingScreen(navController: NavHostController) {
 //    val ctx = LocalContext.current
 
-    val systemUiController = rememberSystemUiController()
-    val barsColor = MaterialTheme.colorScheme.primary
-    SideEffect {
-        systemUiController.setSystemBarsColor(color = barsColor, darkIcons = false)
-    }
+//    val systemUiController = rememberSystemUiController()
+//    val barsColor = MaterialTheme.colorScheme.primary
+//    SideEffect {
+//        systemUiController.setSystemBarsColor(color = barsColor, darkIcons = false)
+//    }
 
     Column(
         modifier = Modifier

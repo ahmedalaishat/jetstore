@@ -41,7 +41,6 @@ import com.alaishat.ahmed.mobostore.ui.components.AppTextField
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -50,7 +49,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController, login: () -> Any) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -61,13 +60,13 @@ fun LoginScreen(navController: NavHostController) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val ctx = LocalContext.current
 
-    val systemUiController = rememberSystemUiController()
-    val statusBarColor = MaterialTheme.colorScheme.primary
-    val navigationBarColor = MaterialTheme.colorScheme.surface
-    SideEffect {
-        systemUiController.setStatusBarColor(color = statusBarColor, darkIcons = false)
-        systemUiController.setNavigationBarColor(color = navigationBarColor, darkIcons = false)
-    }
+//    val systemUiController = rememberSystemUiController()
+//    val statusBarColor = MaterialTheme.colorScheme.primary
+//    val navigationBarColor = MaterialTheme.colorScheme.surface
+//    SideEffect {
+//        systemUiController.setStatusBarColor(color = statusBarColor, darkIcons = false)
+//        systemUiController.setNavigationBarColor(color = navigationBarColor, darkIcons = false)
+//    }
 
     Box(
         modifier = Modifier
@@ -132,7 +131,10 @@ fun LoginScreen(navController: NavHostController) {
                             imeAction = ImeAction.Go
                         ),
                         keyboardActions = KeyboardActions(
-                            onGo = { login(ctx, navController, keyboardController) }),
+                            onGo = {
+                                navigate(ctx, navController, keyboardController)
+                                login()
+                            }),
                         trailingIcon = {
                             PasswordTrailingIcon(passwordVisible) {
                                 passwordVisible = !passwordVisible
@@ -148,7 +150,10 @@ fun LoginScreen(navController: NavHostController) {
                 }
                 VerticalSpacer(height = 62.dp)
                 AppButton(
-                    onClick = { login(ctx, navController, keyboardController) },
+                    onClick = {
+                        navigate(ctx, navController, keyboardController)
+                        login()
+                    },
                     text = "Login",
                 )
                 VerticalSpacer(height = 20.dp)
@@ -170,7 +175,7 @@ private fun PasswordTrailingIcon(passwordVisible: Boolean, onClick: (Int) -> Uni
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
-private fun login(ctx: Context, navController: NavController, keyboardController: SoftwareKeyboardController?) {
+private fun navigate(ctx: Context, navController: NavController, keyboardController: SoftwareKeyboardController?) {
     keyboardController?.hide()
     Toast.makeText(ctx, "Logged In", Toast.LENGTH_LONG).show()
     gotoHome(navController)
@@ -185,6 +190,6 @@ private fun gotoHome(navController: NavController) {
 @Composable
 fun LoginPreview() {
     MoboStoreTheme {
-        LoginScreen(rememberNavController())
+        LoginScreen(rememberNavController()) {}
     }
 }

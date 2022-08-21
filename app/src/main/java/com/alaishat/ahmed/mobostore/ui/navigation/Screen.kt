@@ -64,7 +64,10 @@ sealed class Screen(
     object NoConnection : Screen("NoConnection")
 
     companion object {
-        fun shouldBottomBarHidden(route: String?) = route == OnBoarding.route || route == Login.route
+        private fun loginScreens() = listOf(
+            OnBoarding,
+            Login,
+        )
 
         fun bottomBarScreens() = listOf(
             Home,
@@ -81,6 +84,10 @@ sealed class Screen(
             Settings,
         )
 
-        fun isLoginStack(route: String?) = route == OnBoarding.route || route == Login.route
+        fun isLoginScreen(route: String?) = loginScreens().map(Screen::route).contains(route)
+
+        fun isBottomBarScreen(route: String?) = bottomBarScreens().map(Screen::route).contains(route)
+
+        fun getStartDestination(isLoggedIn: Boolean) = if (isLoggedIn) Home else OnBoarding
     }
 }
