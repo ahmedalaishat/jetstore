@@ -4,12 +4,14 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,9 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.AppHeader
 import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
@@ -75,12 +77,13 @@ fun ProfileScreen(navController: NavHostController) {
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp)
                     ) {
-                        Image(
+                        Icon(
                             painter = painterResource(id = R.drawable.ic_location),
                             contentDescription = "",
                             modifier = Modifier
                                 .size(48.dp)
-                                .padding(horizontal = 12.dp)
+                                .padding(horizontal = 12.dp),
+                            tint = Color.Unspecified
                         )
                         Text(
                             text = "Address: Ibn Asaker Road\n" +
@@ -140,9 +143,8 @@ private fun ProfileListItem(
                 modifier = Modifier
                     .weight(1f),
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface
             )
-            Image(
+            Icon(
                 painter = painterResource(id = R.drawable.ic_chevron_left),
                 contentDescription = null,
             )

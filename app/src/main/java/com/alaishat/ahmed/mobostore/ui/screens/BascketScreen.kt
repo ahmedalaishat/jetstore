@@ -23,7 +23,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.*
+import com.alaishat.ahmed.mobostore.ui.components.BasketItem
+import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
+import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
@@ -109,10 +113,7 @@ fun BasketScreen(navController: NavHostController) {
                         )
                     }
                     VerticalSpacer(height = 50.dp)
-                    AppButton(
-                        onClick = { gotoCheckout(navController) },
-                        text = "Checkout",
-                    )
+                    PrimaryButton(text = "Checkout", onClick = { gotoCheckout(navController) })
                 }
             }
 //            if (count == 0)

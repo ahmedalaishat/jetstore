@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.alaishat.ahmed.mobostore.ui.components.BottomBar
-import com.alaishat.ahmed.mobostore.ui.components.DrawerContent
-import com.alaishat.ahmed.mobostore.ui.components.modal.PaymentModal
+import com.alaishat.ahmed.mobostore.ui.components.modalsheets.PaymentModal
+import com.alaishat.ahmed.mobostore.ui.components.navigation.BottomBar
+import com.alaishat.ahmed.mobostore.ui.components.navigation.DrawerContent
 import com.alaishat.ahmed.mobostore.ui.navigation.AppNavHost
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
@@ -117,8 +117,6 @@ class MainActivity : ComponentActivity() {
                                 bottomBar = {
                                     BottomBar(navController = navController, showBottomBar)
                                 },
-                                containerColor = MaterialTheme.colorScheme.background,
-//                                contentColor =
                             ) { innerPadding ->
                                 AppNavHost(
                                     navController = navController,

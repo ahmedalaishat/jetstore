@@ -1,4 +1,4 @@
-package com.alaishat.ahmed.mobostore.ui.components
+package com.alaishat.ahmed.mobostore.ui.components.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -7,10 +7,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.bottomBarNavigate
@@ -36,7 +39,7 @@ fun BottomBar(
         content = {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.onBackground,
 
                 ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -45,17 +48,12 @@ fun BottomBar(
                     val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
                     NavigationBarItem(
                         icon = {
-                            Icon(
-                                painterResource(if (selected) screen.selectedDrawableId!! else screen.drawableId!!),
-                                contentDescription = null,
-                            )
+                            Icon(painterResource(screen.getDrawableId(selected)!!), contentDescription = null)
                         },
-//                label = { Text(stringResource(screen.resourceId)) },
                         selected = selected,
                         onClick = {
                             navController.bottomBarNavigate(screen.route)
                         },
-//                modifier = Modifier.background(MaterialTheme.colorScheme.background),
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
                             indicatorColor = MaterialTheme.colorScheme.background
@@ -69,6 +67,6 @@ fun BottomBar(
 @Composable
 fun BottomBarPreview() {
     MoboStoreTheme {
-//        BottomBar(rememberNavController())
+        BottomBar(rememberNavController(), rememberSaveable { mutableStateOf(false) })
     }
 }

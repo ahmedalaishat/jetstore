@@ -1,9 +1,6 @@
-package com.alaishat.ahmed.mobostore.ui.components
+package com.alaishat.ahmed.mobostore.ui.components.buttons
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -12,7 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alaishat.ahmed.mobostore.ui.components.BallPulseSyncIndicator
+import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -26,14 +27,13 @@ fun AppButton(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.primary,
     contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    textStyle: TextStyle = MaterialTheme.typography.labelLarge,
     loading: Boolean = false
 ) {
     Box(modifier = modifier) {
         Button(
             onClick = onClick,
-            modifier = Modifier
-                .width(314.dp)
-                .height(70.dp),
+            modifier = Modifier.fillMaxSize(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = containerColor,
                 disabledContainerColor = containerColor.copy(alpha = 0.7f)
@@ -51,8 +51,16 @@ fun AppButton(
                 Text(
                     text = text,
                     color = contentColor,
-                    style = MaterialTheme.typography.labelLarge
+                    style = textStyle
                 )
         }
+    }
+}
+
+@Composable
+@Preview
+fun AppButtonPreview() {
+    MoboStoreTheme {
+        AppButton(text = "Hello Button", onClick = { })
     }
 }

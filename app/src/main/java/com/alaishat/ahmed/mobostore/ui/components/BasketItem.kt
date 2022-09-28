@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.ui.components.buttons.IconButton
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 
 /**
@@ -60,7 +61,15 @@ fun BasketItem(modifier: Modifier = Modifier) {
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         HorizontalSpacer(width = 12.dp)
-                        AppIconButton(onClick = { if (count > 1) count-- }, iconId = R.drawable.ic_remove)
+                        IconButton(
+                            onClick = { if (count > 1) count-- },
+                            iconId = R.drawable.ic_remove,
+                            iconSize = 8.dp,
+                            shape = RoundedCornerShape(4.dp),
+                            backgroundColor = MaterialTheme.colorScheme.secondary,
+                            iconTint = MaterialTheme.colorScheme.onSecondary,
+                            paddingValue = PaddingValues(8.dp)
+                        )
                         Text(
                             text = count.toString(),
                             modifier = Modifier
@@ -70,7 +79,15 @@ fun BasketItem(modifier: Modifier = Modifier) {
                             style = MaterialTheme.typography.labelSmall,
                             textAlign = TextAlign.Center
                         )
-                        AppIconButton(onClick = { count++ }, iconId = R.drawable.ic_add)
+                        IconButton(
+                            onClick = { count++ },
+                            iconId = R.drawable.ic_add,
+                            iconSize = 8.dp,
+                            shape = RoundedCornerShape(4.dp),
+                            backgroundColor = MaterialTheme.colorScheme.secondary,
+                            iconTint = MaterialTheme.colorScheme.onSecondary,
+                            paddingValue = PaddingValues(8.dp)
+                        )
                     }
                 }
             }

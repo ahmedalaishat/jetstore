@@ -6,14 +6,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -22,14 +23,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.AppButton
-import com.alaishat.ahmed.mobostore.ui.components.AppHeader
 import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
+import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import kotlinx.coroutines.CoroutineScope
@@ -110,9 +110,9 @@ fun CheckoutScreen(navController: NavHostController, scope: CoroutineScope, moda
                 )
             }
             VerticalSpacer(height = 50.dp)
-            AppButton(
-                onClick = { scope.launch { modalState.animateTo(ModalBottomSheetValue.Expanded) } },
+            PrimaryButton(
                 text = "Confirm and pay",
+                onClick = { scope.launch { modalState.animateTo(ModalBottomSheetValue.Expanded) } },
             )
             VerticalSpacer(height = 20.dp)
         }

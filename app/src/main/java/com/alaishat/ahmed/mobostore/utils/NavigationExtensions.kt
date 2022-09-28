@@ -1,6 +1,5 @@
 package com.alaishat.ahmed.mobostore.utils
 
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FloatTweenSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.material3.DrawerState
@@ -46,5 +45,5 @@ suspend fun DrawerState.animateClose() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 suspend fun DrawerState.animateOpen() {
-    animateTo(DrawerValue.Open, FloatTweenSpec(100, 0, FastOutSlowInEasing))
+    animateTo(DrawerValue.Open, FloatTweenSpec(100, 0, LinearOutSlowInEasing))
 }

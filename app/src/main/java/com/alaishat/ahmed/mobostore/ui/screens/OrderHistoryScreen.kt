@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.AppHeader
 import com.alaishat.ahmed.mobostore.ui.components.EmptyItems
 import com.alaishat.ahmed.mobostore.ui.components.Product
+import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
 /**

@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
-import com.alaishat.ahmed.mobostore.utils.advancedShadow
 
 /**
  * Created by Ahmed Al-Aishat on Aug/03/2022.

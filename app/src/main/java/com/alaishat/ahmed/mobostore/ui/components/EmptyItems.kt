@@ -10,7 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.ui.components.buttons.SecondaryButton
+import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
 /**
  * Created by Ahmed Al-Aishat on Aug/04/2022.
@@ -46,12 +50,22 @@ fun EmptyItems(
         }
         if (onClickButton != null && buttonText != null) {
             VerticalSpacer(height = 30.dp)
-            AppButton(
-                text = buttonText,
-                onClick = onClickButton,
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.onSecondary,
-            )
+            SecondaryButton(text = buttonText, onClick = onClickButton)
         }
+    }
+}
+
+@Composable
+@Preview
+fun EmptyItemsPreview(){
+    MoboStoreTheme {
+        EmptyItems(
+            imageId = R.drawable.sally_no_favorites,
+            titleText = "No favorites yet",
+            descriptionText = "Hit the orange button down\n" +
+                    "below to Create an order",
+            buttonText = "Start ordering",
+            onClickButton = { }
+        )
     }
 }

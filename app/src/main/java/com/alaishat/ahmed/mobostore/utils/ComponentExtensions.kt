@@ -1,16 +1,10 @@
 package com.alaishat.ahmed.mobostore.utils
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.FloatTweenSpec
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -22,9 +16,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
-import androidx.navigation.NavController
-import com.alaishat.ahmed.mobostore.ui.navigation.Screen
-import kotlinx.coroutines.launch
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -104,9 +95,12 @@ fun Modifier.animatePage(
 }
 
 fun Modifier.silentClickable(
+    silent: Boolean = true,
     onClick: () -> Unit
-) = clickable(
-    interactionSource = MutableInteractionSource(),
-    indication = null,
-    onClick = onClick
-)
+) =
+    if (!silent) clickable { onClick() }
+    else clickable(
+        interactionSource = MutableInteractionSource(),
+        indication = null,
+        onClick = onClick
+    )

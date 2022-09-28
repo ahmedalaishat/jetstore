@@ -35,12 +35,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.AppButton
-import com.alaishat.ahmed.mobostore.ui.components.AppClickableText
-import com.alaishat.ahmed.mobostore.ui.components.AppTextField
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.buttons.AppButton
+import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
+import com.alaishat.ahmed.mobostore.ui.components.navigation.navigate
+import com.alaishat.ahmed.mobostore.ui.components.textfields.AppTextField
+import com.alaishat.ahmed.mobostore.ui.components.texts.AppClickableText
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -52,6 +57,8 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 fun LoginScreen(navController: NavHostController, login: () -> Any) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var loading by remember { mutableStateOf(false) }
+    var scope = rememberCoroutineScope()
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     val passwordTransformation =
@@ -59,14 +66,6 @@ fun LoginScreen(navController: NavHostController, login: () -> Any) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val ctx = LocalContext.current
-
-//    val systemUiController = rememberSystemUiController()
-//    val statusBarColor = MaterialTheme.colorScheme.primary
-//    val navigationBarColor = MaterialTheme.colorScheme.surface
-//    SideEffect {
-//        systemUiController.setStatusBarColor(color = statusBarColor, darkIcons = false)
-//        systemUiController.setNavigationBarColor(color = navigationBarColor, darkIcons = false)
-//    }
 
     Box(
         modifier = Modifier
@@ -149,12 +148,18 @@ fun LoginScreen(navController: NavHostController, login: () -> Any) {
                     )
                 }
                 VerticalSpacer(height = 62.dp)
-                AppButton(
+                PrimaryButton(
                     onClick = {
-                        navigate(ctx, navController, keyboardController)
-                        login()
+                        scope.launch {
+                            loading = true
+                            delay(2000)
+                            loading = false
+                            navigate(ctx, navController, keyboardController)
+                            login()
+                        }
                     },
                     text = "Login",
+                    loading = loading
                 )
                 VerticalSpacer(height = 20.dp)
                 AppClickableText(text = "Create account", onClick = {})

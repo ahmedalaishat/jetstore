@@ -8,7 +8,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,12 +19,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.AppButton
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.buttons.AppButton
+import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.advancedShadow
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -66,11 +65,10 @@ fun OnBoardingScreen(navController: NavHostController) {
                 .absoluteOffset(0.dp, (-64).dp)
                 .advancedShadow(color = Color(0xFF6350FF), 0.99f, 0.dp, 32.dp, 32.dp),
         )
-        AppButton(
+        PrimaryButton(
             text = "Get Started",
             onClick = { gotoLogin(navController) },
-            contentColor = MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.onPrimary
+            reverseColors = true
         )
         VerticalSpacer(height = 100.dp)
     }

@@ -1,6 +1,5 @@
 package com.alaishat.ahmed.mobostore.ui.navigation
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.alaishat.ahmed.mobostore.R
 

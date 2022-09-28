@@ -1,4 +1,4 @@
-package com.alaishat.ahmed.mobostore.ui.components.modal
+package com.alaishat.ahmed.mobostore.ui.components.modalsheets
 
 import android.content.Context
 import android.widget.Toast
@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,8 +23,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.AppButton
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
@@ -107,7 +109,6 @@ fun PaymentModal() {
                 modifier = Modifier.weight(1f),
                 text = "Total",
                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = AppTypefaceTokens.WeightRegular),
-                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Start
             )
             Text(
@@ -119,10 +120,7 @@ fun PaymentModal() {
             )
         }
         VerticalSpacer(height = 40.dp)
-        AppButton(
-            onClick = { pay(context) },
-            text = "Pay now",
-        )
+        PrimaryButton(text = "Pay now", onClick = { pay(context) })
     }
 }
 

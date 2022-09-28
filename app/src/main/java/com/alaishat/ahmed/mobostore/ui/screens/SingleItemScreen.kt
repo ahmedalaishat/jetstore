@@ -5,9 +5,8 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -22,10 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.ui.components.AppButton
-import com.alaishat.ahmed.mobostore.ui.components.AppHeader
 import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.buttons.AppButton
+import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
+import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.components.shape.Ball
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
@@ -131,7 +131,11 @@ fun SingleItemScreen(navController: NavController) {
                             style = MaterialTheme.typography.labelMedium,
                         )
                         HorizontalSpacer(width = 8.dp)
-                        Image(painter = painterResource(id = R.drawable.ic_vector), contentDescription = null)
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_vector),
+                            contentDescription = null,
+                            tint = Color.Unspecified,
+                        )
                     }
                     VerticalSpacer(height = 30.dp)
                     Row {
@@ -151,13 +155,13 @@ fun SingleItemScreen(navController: NavController) {
                         )
                     }
                     VerticalSpacer(height = 50.dp)
-                    AppButton(
+                    PrimaryButton(
+                        text = "Add to basket",
                         modifier = Modifier.align(CenterHorizontally),
                         onClick = {
                             Toast.makeText(context, "Item added to basket", Toast.LENGTH_LONG).show()
 //                            navController.popBackStack()
                         },
-                        text = "Add to basket",
                     )
                 }
             }

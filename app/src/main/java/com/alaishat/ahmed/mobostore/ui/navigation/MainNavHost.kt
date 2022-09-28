@@ -27,14 +27,11 @@ fun AppNavHost(
     scope: CoroutineScope,
     startDestination: String,
     innerPadding: PaddingValues,
-//    windowPadding: PaddingValues,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = Modifier
-            .padding(innerPadding),
-//            .padding(windowPadding),
+        modifier = Modifier.padding(innerPadding),
     ) {
         composable(Screen.OnBoarding.route) { OnBoardingScreen(navController) }
         composable(Screen.Login.route) { LoginScreen(navController, login) }

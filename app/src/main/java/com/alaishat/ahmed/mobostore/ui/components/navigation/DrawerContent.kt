@@ -1,4 +1,4 @@
-package com.alaishat.ahmed.mobostore.ui.components
+package com.alaishat.ahmed.mobostore.ui.components.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.bottomBarNavigate

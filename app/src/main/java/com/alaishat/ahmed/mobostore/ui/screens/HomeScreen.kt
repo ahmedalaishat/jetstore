@@ -18,8 +18,9 @@ import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.Product
-import com.alaishat.ahmed.mobostore.ui.components.SearchField
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
+import com.alaishat.ahmed.mobostore.ui.components.headers.SearchHeader
+import com.alaishat.ahmed.mobostore.ui.components.textfields.SearchField
 import com.alaishat.ahmed.mobostore.ui.navigation.HomeTab
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
@@ -50,31 +51,12 @@ fun HomeScreen(navController: NavHostController, openDrawer: () -> Any) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         VerticalSpacer(height = 10.dp)
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 12.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_menu), contentDescription = "",
-                modifier = Modifier
-                    .size(48.dp)
-                    .clickable(
-                        interactionSource = MutableInteractionSource(),
-                        indication = rememberRipple(bounded = true, radius = 24.dp),
-                        onClick = { openDrawer() })
-                    .padding(horizontal = 12.dp)
-            )
-            HorizontalSpacer(width = 12.dp)
-            SearchField(
-                value = search,
-                onValueChange = { search = it },
-                modifier = Modifier
-                    .padding(end = 50.dp)
-                    .fillMaxWidth(),
-                enabled = false,
-                onClick = { navController.navigate(Screen.Search.route) }
-            )
-        }
+        SearchHeader(
+            searchValue = search,
+            onValueChange = { search = it },
+            onClickLeftIcon = { openDrawer() },
+            onClickInput = { navController.navigate(Screen.Search.route) }
+        )
         VerticalSpacer(height = 55.dp)
         Text(
             text = "Order online\ncollect in store",

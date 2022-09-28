@@ -1,4 +1,4 @@
-package com.alaishat.ahmed.mobostore.ui.components
+package com.alaishat.ahmed.mobostore.ui.components.textfields
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
