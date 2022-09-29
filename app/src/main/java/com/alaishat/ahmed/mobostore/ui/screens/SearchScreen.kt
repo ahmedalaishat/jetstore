@@ -1,33 +1,27 @@
 package com.alaishat.ahmed.mobostore.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.data.products.appleAirPods
 import com.alaishat.ahmed.mobostore.ui.components.EmptyItems
-import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
-import com.alaishat.ahmed.mobostore.ui.components.Product
+import com.alaishat.ahmed.mobostore.ui.components.ProductContent
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.headers.SearchHeader
-import com.alaishat.ahmed.mobostore.ui.components.textfields.SearchField
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.header
 
@@ -77,7 +71,8 @@ fun SearchScreen(navController: NavHostController) {
             items(count) { item ->
 //                val offset = if (item % 2 == 0) 0.dp else 50.dp
                 val absOffset = if (item % 2 == 0) 0.dp else 40.dp
-                Product(
+                ProductContent(
+                    appleAirPods,
                     modifier = Modifier.absoluteOffset(0.dp, absOffset),
                     showSecondaryText = false,
                 )

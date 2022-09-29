@@ -1,9 +1,7 @@
 package com.alaishat.ahmed.mobostore.ui.screens
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,12 +14,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.data.products.homeCategories
+import com.alaishat.ahmed.mobostore.model.HomeCategory
 import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
-import com.alaishat.ahmed.mobostore.ui.components.Product
+import com.alaishat.ahmed.mobostore.ui.components.ProductContent
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.headers.SearchHeader
-import com.alaishat.ahmed.mobostore.ui.components.textfields.SearchField
-import com.alaishat.ahmed.mobostore.ui.navigation.HomeTab
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.animatePage
@@ -94,12 +92,13 @@ fun HomeScreen(navController: NavHostController, openDrawer: () -> Any) {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomePager(navController: NavController) {
-    val tabs = listOf(
-        HomeTab.Wearable,
-        HomeTab.Laptops,
-        HomeTab.Phones,
-        HomeTab.Drones,
-    )
+//    val tabs = listOf(
+//        HomeTab.Wearable,
+//        HomeTab.Laptops,
+//        HomeTab.Phones,
+//        HomeTab.Drones,
+//    )
+    val tabs = homeCategories
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -113,7 +112,12 @@ private fun HomePager(navController: NavController) {
         // Add tabs for all of our pages
         tabs.forEachIndexed { index, tab ->
             Tab(
-                text = { Text(text = stringResource(id = tab.nameId), style = MaterialTheme.typography.labelSmall) },
+                text = {
+                    Text(
+                        text = stringResource(id = tab.category.tabName),
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                },
                 selected = pagerState.currentPage == index,
                 onClick = {
                     coroutineScope.launch {
@@ -132,17 +136,18 @@ private fun HomePager(navController: NavController) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun HomeTabContent(homeTab: HomeTab, navController: NavController) {
+private fun HomeTabContent(homeCategory: HomeCategory, navController: NavController) {
     HorizontalPager(
         modifier = Modifier.padding(top = 50.dp),
-        count = 5, // AHMED_TODO call api to get items depending on the current tab
+        count = homeCategory.products.size,
         contentPadding = PaddingValues(start = 70.dp, end = 110.dp)
     ) { item ->
         // Calculate the absolute offset for the current page from the
         // scroll position. We use the absolute value which allows us to mirror
         // any effects for both directions
         val pageOffset = calculateCurrentOffsetForPage(item).absoluteValue
-        Product(
+        ProductContent(
+            homeCategory.products[item],
             modifier = Modifier.animatePage(pageOffset),
             onProductClicked = { navController.navigate(Screen.SingleItem.route) },
         )

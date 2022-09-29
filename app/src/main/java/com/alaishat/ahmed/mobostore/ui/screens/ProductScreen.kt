@@ -15,15 +15,18 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.data.products.*
+import com.alaishat.ahmed.mobostore.model.ProductColor
 import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
-import com.alaishat.ahmed.mobostore.ui.components.buttons.AppButton
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
 import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.components.shape.Ball
@@ -41,17 +44,13 @@ import kotlin.math.absoluteValue
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
-fun SingleItemScreen(navController: NavController) {
+fun ProductScreen(navController: NavController) {
     val context = LocalContext.current
+
+    val product = samsungBuds
 
     var isLoved by remember { mutableStateOf(false) }
 
-    val colors =
-        listOf(
-            ItemColor("Sky Blue", 0xFF7485C1),
-            ItemColor("Rose Gold", 0xFFC9A19C),
-            ItemColor("Green", 0xFFA1C89B)
-        )
     var selectedColor by remember { mutableStateOf(1) }
 
     val toggleLove = {
@@ -75,7 +74,7 @@ fun SingleItemScreen(navController: NavController) {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            ItemImagesPager()
+            ItemImagesPager(product.images)
             VerticalSpacer(height = 10.dp)
             Card(
                 modifier = Modifier.fillMaxSize(),
@@ -89,7 +88,7 @@ fun SingleItemScreen(navController: NavController) {
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "2020 Apple iPad Air 10.9",
+                        text = product.title + " " + product.subtitle,
                         style = MaterialTheme.typography.headlineMedium,
                         textAlign = TextAlign.Center,
                     )
@@ -101,9 +100,9 @@ fun SingleItemScreen(navController: NavController) {
                     )
                     VerticalSpacer(height = 10.dp)
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                        items(count = colors.size, itemContent = { position ->
+                        items(count = product.colors.size, itemContent = { position ->
                             ColorCard(
-                                itemColor = colors[position],
+                                itemColor = product.colors[position],
                                 isSelected = position == selectedColor
                             ) { selectedColor = position }
                         })
@@ -148,7 +147,7 @@ fun SingleItemScreen(navController: NavController) {
                         )
                         Text(
                             modifier = Modifier.weight(1f),
-                            text = "\$ 954",
+                            text = "\$ ${product.price}",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.End
@@ -170,7 +169,7 @@ fun SingleItemScreen(navController: NavController) {
 }
 
 @Composable
-fun ColorCard(itemColor: ItemColor, isSelected: Boolean, onSelect: () -> Unit) {
+fun ColorCard(itemColor: ProductColor, isSelected: Boolean, onSelect: () -> Unit) {
     val border = if (isSelected) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.outlineVariant
 
     Card(
@@ -182,10 +181,10 @@ fun ColorCard(itemColor: ItemColor, isSelected: Boolean, onSelect: () -> Unit) {
                 .padding(15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Ball(color = Color(itemColor.color), size = 16.dp)
+            Ball(color = colorResource(id = itemColor.colorId), size = 16.dp)
             HorizontalSpacer(width = 8.dp)
             Text(
-                text = itemColor.desc,
+                text = stringResource(id = itemColor.colorName),
                 style = MaterialTheme.typography.labelSmall,
             )
         }
@@ -194,19 +193,18 @@ fun ColorCard(itemColor: ItemColor, isSelected: Boolean, onSelect: () -> Unit) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ItemImagesPager() {
+fun ItemImagesPager(images: List<Int>) {
     HorizontalPager(
         modifier = Modifier.padding(top = 50.dp),
-        count = 5, // AHMED_TODO call api to get item images
+        count = images.size,
         contentPadding = PaddingValues(start = 70.dp, end = 110.dp)
     ) { item ->
         // Calculate the absolute offset for the current page from the
         // scroll position. We use the absolute value which allows us to mirror
         // any effects for both directions
         val pageOffset = calculateCurrentOffsetForPage(item).absoluteValue
-        val img = if (item % 2 == 1) R.drawable.item_basket2 else R.drawable.item_basket
         Image(
-            painterResource(id = img),
+            painterResource(id = images[item]),
             modifier = Modifier
                 .animatePage(pageOffset)
                 .size(width = 230.dp, height = 265.dp),
@@ -219,9 +217,6 @@ fun ItemImagesPager() {
 @Composable
 fun SingleItemPreview() {
     MoboStoreTheme {
-        SingleItemScreen(rememberNavController())
+        ProductScreen(rememberNavController())
     }
 }
-
-
-data class ItemColor(val desc: String, val color: Long)

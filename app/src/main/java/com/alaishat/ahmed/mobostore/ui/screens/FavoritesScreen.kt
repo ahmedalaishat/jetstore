@@ -14,8 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.data.products.appleAirPods
 import com.alaishat.ahmed.mobostore.ui.components.EmptyItems
-import com.alaishat.ahmed.mobostore.ui.components.Product
+import com.alaishat.ahmed.mobostore.ui.components.ProductContent
 import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
@@ -43,7 +44,7 @@ fun FavoritesScreen(navController: NavHostController) {
             val count = 0
             items(count) { item ->
                 val offset = if (item % 2 == 0) 0.dp else 50.dp
-                Product(Modifier.padding(top = offset, start = 35.dp, end = 35.dp))
+                ProductContent(appleAirPods, Modifier.padding(top = offset, start = 35.dp, end = 35.dp))
             }
             if (count == 0)
                 item(span = { GridItemSpan(this.maxLineSpan) }, content = { NoFavorites() })

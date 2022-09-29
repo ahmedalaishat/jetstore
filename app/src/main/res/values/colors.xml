@@ -7,4 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="buds_bora_purple">#FFC0B3D1</color>
+    <color name="buds_white">#FFF4F4F4</color>
+    <color name="buds_graphite">#FF4F4F52</color>
+
+    <color name="phone_sky_blue">#FF7485C1</color>
+    <color name="phone_rose_gold">#FFC9A19C</color>
+    <color name="phone_pink_gold">#FFF8F0EE</color>
+    <color name="phone_green">#FFA1C89B</color>
+
+    <color name="watch_silver">#FFC0C0C0</color>
+    <color name="watch_gold">#FFFFD700</color>
+    <color name="watch_black">#FF242628</color>
 </resources>

@@ -3,5 +3,19 @@
     <string name="wearable">Wearable</string>
     <string name="laptops">Laptops</string>
     <string name="phones">Phones</string>
-    <string name="drones">Drones</string>
+    <string name="buds">Buds</string>
+
+
+    <string name="color_name_white">White</string>
+    <string name="color_name_graphite">Graphite</string>
+    <string name="color_name_bora_purple">Bora Purple</string>
+
+    <string name="color_name_sky_blue">Sky Blue</string>
+    <string name="color_name_rose_gold">Rose Gold</string>
+    <string name="color_name_bink_gold">Pink Gold</string>
+    <string name="color_name_green">Green</string>
+
+    <string name="color_name_silver">Silver</string>
+    <string name="color_name_gold">Gold</string>
+    <string name="color_name_black">Black</string>
 </resources>

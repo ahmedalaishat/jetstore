@@ -40,7 +40,7 @@ fun AppNavHost(
         composable(Screen.Profile.route) { ProfileScreen(navController) }
         composable(Screen.Basket.route) { BasketScreen(navController) }
         composable(Screen.Checkout.route) { CheckoutScreen(navController, scope, modalBottomSheetState) }
-        composable(Screen.SingleItem.route) { SingleItemScreen(navController) }
+        composable(Screen.SingleItem.route) { ProductScreen(navController) }
         composable(Screen.Search.route) { SearchScreen(navController) }
         composable(Screen.OrderHistory.route) { HistoryScreen(navController) }
         composable(Screen.NoConnection.route) { NoConnectionScreen(navController) }

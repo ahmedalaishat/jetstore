@@ -15,5 +15,5 @@ sealed class HomeTab(
     object Wearable : HomeTab("Wearable", R.string.wearable)
     object Laptops : HomeTab("Laptops", R.string.laptops)
     object Phones : HomeTab("Phones", R.string.phones)
-    object Drones : HomeTab("Drones", R.string.drones)
+    object Drones : HomeTab("Drones", R.string.buds)
 }
