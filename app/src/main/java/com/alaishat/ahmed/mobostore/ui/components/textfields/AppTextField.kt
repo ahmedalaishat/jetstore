@@ -26,7 +26,6 @@ import com.alaishat.ahmed.mobostore.ui.theme.OnSurfaceVariant
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 
 val MinWidth = 280.dp

@@ -10,7 +10,6 @@ import androidx.compose.runtime.NonRestartableComposable
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 inline fun <reified Activity : ComponentActivity> Context.getActivity(): Activity? {
     return when (this) {

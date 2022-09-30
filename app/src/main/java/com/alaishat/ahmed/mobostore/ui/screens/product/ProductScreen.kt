@@ -40,7 +40,6 @@ import kotlin.math.absoluteValue
 /**
  * Created by Ahmed Al-Aishat on Aug/17/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
 fun ProductScreen(

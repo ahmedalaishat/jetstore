@@ -35,7 +35,6 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 /**
  * Created by Ahmed Al-Aishat on Aug/01/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

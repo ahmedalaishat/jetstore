@@ -7,7 +7,6 @@ import androidx.annotation.StringRes
 /**
  * Created by Ahmed Al-Aishat on Sep/28/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 data class Product(
     val id: Int,

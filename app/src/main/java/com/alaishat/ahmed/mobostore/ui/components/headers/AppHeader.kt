@@ -17,7 +17,6 @@ import com.alaishat.ahmed.mobostore.ui.components.buttons.IconButton
 /**
  * Created by Ahmed Al-Aishat on Aug/04/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 
 @Composable

@@ -6,7 +6,6 @@ import com.alaishat.ahmed.mobostore.R
 /**
  * Created by Ahmed Al-Aishat on Sep/28/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 data class HomeCategory(
     val products: List<Product>,

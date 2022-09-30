@@ -15,7 +15,6 @@ import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 /**
  * Created by Ahmed Al-Aishat on Aug/21/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 fun NavController.bottomBarNavigate(
     route: String,

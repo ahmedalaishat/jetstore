@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 /**
  * Created by Ahmed Al-Aishat on Aug/16/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
 fun Ball(

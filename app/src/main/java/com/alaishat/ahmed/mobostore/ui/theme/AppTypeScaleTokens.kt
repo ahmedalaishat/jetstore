@@ -3,7 +3,6 @@ package com.alaishat.ahmed.mobostore.ui.theme
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 
 import androidx.compose.ui.unit.sp

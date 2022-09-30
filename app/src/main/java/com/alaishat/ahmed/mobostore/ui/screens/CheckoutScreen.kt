@@ -38,7 +38,6 @@ import kotlinx.coroutines.launch
 /**
  * Created by Ahmed Al-Aishat on Aug/16/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable

@@ -7,7 +7,6 @@ import com.alaishat.ahmed.mobostore.R
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 sealed class Screen(
     val route: String,

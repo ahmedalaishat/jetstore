@@ -20,7 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 /**
  * Created by Ahmed Al-Aishat on Aug/21/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

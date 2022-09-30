@@ -29,7 +29,6 @@ import com.alaishat.ahmed.mobostore.utils.previousHiltViewModel
 /**
  * Created by Ahmed Al-Aishat on Aug/03/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
 fun SearchScreen(

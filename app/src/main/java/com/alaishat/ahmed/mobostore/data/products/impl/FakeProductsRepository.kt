@@ -16,7 +16,6 @@ import javax.inject.Inject
 /**
  * Created by Ahmed Al-Aishat on Sep/28/2022.
  * Mobo Store Project.
- * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 class FakeProductsRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
