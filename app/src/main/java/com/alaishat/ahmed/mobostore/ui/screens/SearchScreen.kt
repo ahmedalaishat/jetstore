@@ -17,13 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.data.products.appleAirPods
 import com.alaishat.ahmed.mobostore.ui.components.EmptyItems
 import com.alaishat.ahmed.mobostore.ui.components.ProductContent
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.headers.SearchHeader
+import com.alaishat.ahmed.mobostore.ui.screens.home.HomeViewModel
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.header
+import com.alaishat.ahmed.mobostore.utils.previousHiltViewModel
 
 /**
  * Created by Ahmed Al-Aishat on Aug/03/2022.
@@ -31,9 +32,15 @@ import com.alaishat.ahmed.mobostore.utils.header
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
-fun SearchScreen(navController: NavHostController) {
+fun SearchScreen(
+    navController: NavHostController,
+    homeViewModel: HomeViewModel = navController.previousHiltViewModel()
+) {
 
-    var search by remember { mutableStateOf("") }
+    // UiState of the HomeScreen
+    val uiState by homeViewModel.uiState.collectAsState()
+    val products = uiState.searchProducts
+
     val focusRequester = remember { FocusRequester() }
 
     Column(
@@ -42,44 +49,47 @@ fun SearchScreen(navController: NavHostController) {
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val count = 5
         VerticalSpacer(height = 10.dp)
         SearchHeader(
-            searchValue = search,
-            onValueChange = { search = it },
+            searchValue = uiState.searchInput,
+            onValueChange = { homeViewModel.onSearchInputChanged(it) },
             inputEnabled = true,
             focusRequester = focusRequester,
             leftIconId = R.drawable.ic_arrow_left,
-            onClickLeftIcon = { navController.popBackStack() }
+            onClickLeftIcon = {
+                homeViewModel.searchOpened(false)
+                navController.popBackStack()
+            }
         )
-        LazyVerticalGrid(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(vertical = 20.dp, horizontal = 24.dp),
-            columns = GridCells.Fixed(2),
-            horizontalArrangement = Arrangement.spacedBy(35.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-        ) {
-            header {
-                if (count > 0)
-                    Text(
-                        text = "Found  $count results",
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.padding(vertical = 10.dp),
-                        textAlign = TextAlign.Center
-                    )
-            }
-            items(count) { item ->
+        if (uiState.searchInput.isNotEmpty())
+            LazyVerticalGrid(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(vertical = 20.dp, horizontal = 24.dp),
+                columns = GridCells.Fixed(2),
+                horizontalArrangement = Arrangement.spacedBy(35.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+            ) {
+                header {
+                    if (products.isNotEmpty())
+                        Text(
+                            text = "Found  ${products.size} results",
+                            style = MaterialTheme.typography.headlineMedium,
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            textAlign = TextAlign.Center
+                        )
+                }
+                items(products.size) { position ->
 //                val offset = if (item % 2 == 0) 0.dp else 50.dp
-                val absOffset = if (item % 2 == 0) 0.dp else 40.dp
-                ProductContent(
-                    appleAirPods,
-                    modifier = Modifier.absoluteOffset(0.dp, absOffset),
-                    showSecondaryText = false,
-                )
+                    val absOffset = if (position % 2 == 0) 0.dp else 40.dp
+                    ProductContent(
+                        product = products[position],
+                        modifier = Modifier.absoluteOffset(0.dp, absOffset),
+                        showSecondaryText = false,
+                    )
+                }
+                if (products.isEmpty())
+                    item(span = { GridItemSpan(this.maxLineSpan) }, content = { NoItems() })
             }
-            if (count == 0)
-                item(span = { GridItemSpan(this.maxLineSpan) }, content = { NoItems() })
-        }
     }
 
     LaunchedEffect(Unit) {

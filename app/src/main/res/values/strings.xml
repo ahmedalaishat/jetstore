@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">MoboStore</string>
-    <string name="wearable">Wearable</string>
+    <string name="wearables">Wearables</string>
     <string name="laptops">Laptops</string>
     <string name="phones">Phones</string>
     <string name="buds">Buds</string>
@@ -18,4 +18,11 @@
     <string name="color_name_silver">Silver</string>
     <string name="color_name_gold">Gold</string>
     <string name="color_name_black">Black</string>
+
+
+    <string name="network_error">Error, please check your connection and try again</string>
+    <string name="home_tap_to_load_content">Tap to load content</string>
+    <string name="retry">Retry</string>
+    <string name="see_more">see more</string>
+    <string name="Home_title">Order online\ncollect in store</string>
 </resources>

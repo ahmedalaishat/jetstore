@@ -5,6 +5,10 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 
@@ -35,6 +39,21 @@ fun NavController.bottomBarNavigate(
         // Restore state when reselecting a previously selected item
         restoreState = true
     }
+}
+//
+//@Composable
+//inline fun <reified T : ViewModel> NavBackStackEntry?.viewModel(): T? = this?.let {
+//    hiltViewModel(viewModelStoreOwner = it)
+//}
+
+@Composable
+inline fun <reified T : ViewModel> NavController.previousHiltViewModel(): T {
+    val viewModelStoreOwner = previousBackStackEntry ?: checkNotNull(LocalViewModelStoreOwner.current) {
+        "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+    }
+    return androidx.hilt.navigation.compose.hiltViewModel(
+        viewModelStoreOwner = viewModelStoreOwner
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

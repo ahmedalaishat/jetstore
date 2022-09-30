@@ -16,7 +16,7 @@ data class HomeCategory(
 enum class ProductCategory(
     @StringRes val tabName: Int
 ) {
-    WEARABLE(R.string.wearable),
+    WEARABLES(R.string.wearables),
     LAPTOPS(R.string.laptops),
     PHONES(R.string.phones),
     Buds(R.string.buds)

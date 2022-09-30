@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -59,12 +61,28 @@ dependencies {
 //    implementation "com.google.accompanist:accompanist-insets:0.25.1"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
 
+    // swiperefresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
+
     implementation("io.coil-kt:coil-compose:2.1.0")
     implementation "io.coil-kt:coil-gif:1.2.1"
     implementation "io.coil-kt:coil-svg:1.2.1"
     implementation "com.google.accompanist:accompanist-coil:0.10.0"
 
     implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    // startup
+    implementation "androidx.startup:startup-runtime:$startup_version"
+
+    // timber
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    // hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

@@ -23,6 +23,11 @@ interface ProductsRepository {
     suspend fun getHomeProducts(): Result<List<HomeCategory>>
 
     /**
+     * Get home products.
+     */
+    suspend fun searchProduct(searchInput: String): Result<List<Product>>
+
+    /**
      * Observe the current favorites
      */
     fun observeFavorites(): Flow<Set<Int>>

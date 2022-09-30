@@ -13,7 +13,7 @@ import com.alaishat.ahmed.mobostore.model.ProductColor
  */
 val samsungWatchActive2 =
     Product(
-        2, "Samsung Watch", "Active 2", price = 199, imageId = R.drawable.samsung_watch_active2,
+        1, "Samsung Watch", "Active 2", price = 199, imageId = R.drawable.samsung_watch_active2,
         images = listOf(
             R.drawable.samsung_watch_active2_1,
             R.drawable.samsung_watch_active2_3,
@@ -30,7 +30,7 @@ val samsungWatchActive2 =
     )
 
 val appleWatchSeries8 = Product(
-    1, "Apple Watch", "Series 8", price = 849, imageId = R.drawable.apple_watch_series8,
+    2, "Apple Watch", "Series 8", price = 849, imageId = R.drawable.apple_watch_series8,
     images = listOf(
         R.drawable.apple_watch_series8_1,
         R.drawable.apple_watch_series8_2,
@@ -62,7 +62,7 @@ val samsungGalaxyS22Ultra =
 
 val appleIpadAir220 =
     Product(
-        3, "Apple iPad Air", "2020 10.9\"", price = 639, imageId = R.drawable.apple_ipad_air4_2020,
+        4, "Apple iPad Air", "2020 10.9\"", price = 639, imageId = R.drawable.apple_ipad_air4_2020,
         images = listOf(
             R.drawable.apple_ipad_air4_2020_1,
             R.drawable.apple_ipad_air4_2020_2,
@@ -93,7 +93,7 @@ val samsungBuds =
     )
 
 val appleAirPods = Product(
-    4, "APPLE AirPods", "Pro 3", price = 249, imageId = R.drawable.apple_air_puds2,
+    6, "APPLE AirPods", "Pro 3", price = 249, imageId = R.drawable.apple_air_puds2,
     images = listOf(
         R.drawable.apple_air_puds_1,
         R.drawable.apple_air_puds_2,
@@ -107,7 +107,7 @@ val homeCategories: List<HomeCategory> =
     listOf(
         HomeCategory(
             listOf(samsungWatchActive2, appleWatchSeries8),
-            ProductCategory.WEARABLE,
+            ProductCategory.WEARABLES,
         ),
         HomeCategory(
             emptyList(),

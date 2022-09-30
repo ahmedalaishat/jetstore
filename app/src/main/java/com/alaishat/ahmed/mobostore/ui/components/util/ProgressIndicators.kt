@@ -1,10 +1,10 @@
 package com.alaishat.ahmed.mobostore.ui.components
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
@@ -72,4 +72,18 @@ fun BallScaleIndicator() {
             .scale(animationProgress)
             .alpha(1 - animationProgress),
     )
+}
+
+/**
+ * Full screen circular progress indicator
+ */
+@Composable
+fun FullScreenLoading() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
+    ) {
+        CircularProgressIndicator()
+    }
 }

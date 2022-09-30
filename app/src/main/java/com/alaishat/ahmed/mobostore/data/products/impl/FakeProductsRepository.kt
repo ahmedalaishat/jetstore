@@ -6,33 +6,49 @@ import com.alaishat.ahmed.mobostore.data.products.homeCategories
 import com.alaishat.ahmed.mobostore.model.HomeCategory
 import com.alaishat.ahmed.mobostore.model.Product
 import com.alaishat.ahmed.mobostore.utils.addOrRemove
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /**
  * Created by Ahmed Al-Aishat on Sep/28/2022.
  * Mobo Store Project.
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
-class FakeProductsRepository : ProductsRepository {
+class FakeProductsRepository @Inject constructor(
+    private val ioDispatcher: CoroutineDispatcher,
+) : ProductsRepository {
 
     private val favorites = MutableStateFlow<Set<Int>>(setOf())
 
     override suspend fun getProduct(productId: Int): Result<Product> {
-        return withContext(Dispatchers.IO) {
-            val post = homeCategories.flatMap { it.products }.find { product -> product.id == productId }
-            if (post == null) {
+        return withContext(ioDispatcher) {
+            delay(800) // pretend we're on a slow network
+//            val product: Product? = null
+            val product = homeCategories.flatMap { it.products }.find { product -> product.id == productId }
+            if (product == null) {
                 Result.Error(IllegalArgumentException("Unable to find product"))
             } else {
-                Result.Success(post)
+                Result.Success(product)
             }
         }
     }
 
     override suspend fun getHomeProducts(): Result<List<HomeCategory>> {
-        return Result.Success(homeCategories)
+        return withContext(ioDispatcher) {
+            delay(800) // pretend we're on a slow network
+//            Result.Error(IllegalArgumentException("Unable to find product"))
+            Result.Success(homeCategories)
+        }
+    }
+
+    override suspend fun searchProduct(searchInput: String): Result<List<Product>> {
+        return Result.Success(homeCategories.flatMap { it.products }.filter { product ->
+            product.title.contains(searchInput, true) || product.subtitle.contains(searchInput, true)
+        })
     }
 
     override fun observeFavorites(): Flow<Set<Int>> {

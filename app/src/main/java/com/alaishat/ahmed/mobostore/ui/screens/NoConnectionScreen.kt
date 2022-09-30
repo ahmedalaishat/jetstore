@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.EmptyItems
@@ -20,7 +19,7 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
  * Copyright (c) 2022 Cloud Systems. All rights reserved.
  */
 @Composable
-fun NoConnectionScreen(navController: NavHostController) {
+fun NoConnectionScreen(onReload: () -> Unit) {
 
     Box(
         modifier = Modifier
@@ -34,7 +33,7 @@ fun NoConnectionScreen(navController: NavHostController) {
             descriptionText = "Your internet connection is currently\n" +
                     "not available please check or try again.",
             buttonText = "Try again",
-            onClickButton = { }
+            onClickButton = onReload
         )
     }
 }
@@ -43,6 +42,6 @@ fun NoConnectionScreen(navController: NavHostController) {
 @Composable
 fun NoConnectionPreview() {
     MoboStoreTheme {
-        NoConnectionScreen(rememberNavController())
+        NoConnectionScreen { }
     }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.alaishat.ahmed.mobostore.ui.components.MoboSnackbarHost
 import com.alaishat.ahmed.mobostore.ui.components.modalsheets.PaymentModal
 import com.alaishat.ahmed.mobostore.ui.components.navigation.BottomBar
 import com.alaishat.ahmed.mobostore.ui.components.navigation.DrawerContent
@@ -39,8 +40,10 @@ import com.alaishat.ahmed.mobostore.utils.animateClose
 import com.alaishat.ahmed.mobostore.utils.animateOpen
 import com.alaishat.ahmed.mobostore.utils.barsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +59,8 @@ class MainActivity : ComponentActivity() {
 
             val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+            val snackbarHostState = remember { SnackbarHostState() }
 
             var loggedIn by remember { mutableStateOf(true) } // AHMED_TODO check if the user is logged in
             val showBottomBar = rememberSaveable { (mutableStateOf(loggedIn)) }
@@ -117,6 +122,7 @@ class MainActivity : ComponentActivity() {
                                 bottomBar = {
                                     BottomBar(navController = navController, showBottomBar)
                                 },
+                                snackbarHost = { MoboSnackbarHost(hostState = snackbarHostState) }
                             ) { innerPadding ->
                                 AppNavHost(
                                     navController = navController,
@@ -126,6 +132,7 @@ class MainActivity : ComponentActivity() {
                                     scope = scope,
                                     startDestination = Screen.getStartDestination(loggedIn).route,
                                     innerPadding = innerPadding,
+                                    snackbarHostState = snackbarHostState,
                                 )
                             }
                         }
