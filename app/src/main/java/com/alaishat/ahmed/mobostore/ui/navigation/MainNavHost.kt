@@ -52,7 +52,7 @@ fun AppNavHost(
         composable(Screen.Search.route) { SearchScreen(navController) }
         composable(Screen.OrderHistory.route) { HistoryScreen(navController) }
         composable(Screen.NoConnection.route) { NoConnectionScreen { } }
-        composable(Screen.Delivery.route) { BasketScreen(navController) }
-        composable(Screen.Settings.route) { ProfileScreen(navController) }
+//        composable(Screen.Delivery.route) { BasketScreen(navController) }
+//        composable(Screen.Settings.route) { ProfileScreen(navController) }
     }
 }

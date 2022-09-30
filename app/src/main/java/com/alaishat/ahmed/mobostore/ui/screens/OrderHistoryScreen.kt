@@ -56,7 +56,7 @@ private fun NoHistory() {
     EmptyItems(
         imageId = R.drawable.saly_not_history,
         titleText = "No history yet",
-        descriptionText = "Hit the orange button down\n" +
+        subtitle = "Hit the orange button down\n" +
                 "below to Create an order",
         buttonText = "Start ordering",
         onClickButton = { }

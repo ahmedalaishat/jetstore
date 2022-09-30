@@ -79,6 +79,11 @@ sealed class Screen(
             Basket,
         )
 
+        private fun notImplementedScreens() = listOf(
+            Delivery,
+            Settings,
+        )
+
         fun drawerMenuScreens() = listOf(
             Profile,
             Basket,
@@ -90,6 +95,8 @@ sealed class Screen(
         fun isLoginScreen(route: String?) = loginScreens().map(Screen::route).contains(route)
 
         fun isBottomBarScreen(route: String?) = bottomBarScreens().map(Screen::route).contains(route)
+
+        fun isImplemented(route: String?) = !notImplementedScreens().map(Screen::route).contains(route)
 
         fun getStartDestination(isLoggedIn: Boolean) = if (isLoggedIn) Home else OnBoarding
     }

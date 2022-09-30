@@ -25,4 +25,13 @@
     <string name="retry">Retry</string>
     <string name="see_more">see more</string>
     <string name="Home_title">Order online\ncollect in store</string>
+
+    <string name="favorites">Favorites</string>
+    <string name="favorites_title">No favorites yet</string>
+    <string name="favorites_subtitle">Hit the orange button down\nbelow to Create an order</string>
+    <string name="start_ordering">Start ordering</string>
+
+    <string name="search_empty_title">Item not found</string>
+    <string name="search_empty_subtitle">Try a more generic search term or try\nlooking for alternative products.</string>
+    <string name="found_results">Found %s results</string>
 </resources>

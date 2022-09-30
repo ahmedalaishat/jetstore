@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.EmptyItems
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
@@ -29,7 +28,7 @@ fun NoConnectionScreen(onReload: () -> Unit) {
         EmptyItems(
             imageId = R.drawable.no_connection,
             titleText = "No internet Connection",
-            descriptionText = "Your internet connection is currently\n" +
+            subtitle = "Your internet connection is currently\n" +
                     "not available please check or try again.",
             buttonText = "Try again",
             onClickButton = onReload

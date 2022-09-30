@@ -53,7 +53,9 @@ fun DrawerContent(
                         Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navController.bottomBarNavigate(menuItems[index].route)
+                                val route = menuItems[index].route
+                                if (Screen.isImplemented(route))
+                                    navController.bottomBarNavigate(route)
                                 closeDrawer()
                             }
                             .padding(30.dp)) {

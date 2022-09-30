@@ -16,7 +16,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.model.HomeCategory
-import com.alaishat.ahmed.mobostore.model.Product
 import com.alaishat.ahmed.mobostore.ui.components.FullScreenLoading
 import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.ProductContent
@@ -59,7 +58,7 @@ fun HomeScreen(
         VerticalSpacer(height = 10.dp)
         SearchHeader(
             searchValue = "",
-            onValueChange = {  },
+            onValueChange = { },
             onClickLeftIcon = { openDrawer() },
             onClickInput = {
                 homeViewModel.searchOpened(true)
@@ -72,7 +71,7 @@ fun HomeScreen(
             empty = uiState.homeCategories.flatMap { it.products }.isEmpty() && uiState.isLoading,
             emptyContent = { FullScreenLoading() },
             loading = uiState.isLoading,
-            onRefresh = { },
+            onRefresh = { homeViewModel.refreshProducts() },
             content = {
                 if (uiState.homeCategories.flatMap { it.products }.isEmpty()) {
                     if (uiState.errorMessages.isEmpty()) {
@@ -204,30 +203,39 @@ private fun HomePager(navController: NavController, homeCategories: List<HomeCat
         state = pagerState,
         userScrollEnabled = false
     ) { position ->
-        HomeTabContent(homeCategories[position].products, navController = navController)
+        HomeTabContent(homeCategories[position], navController = navController)
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun HomeTabContent(products: List<Product>, navController: NavController) {
-    HorizontalPager(
-        modifier = Modifier.padding(top = 50.dp),
-        count = products.size,
-        contentPadding = PaddingValues(start = 70.dp, end = 110.dp)
-    ) { position ->
-        // Calculate the absolute offset for the current page from the
-        // scroll position. We use the absolute value which allows us to mirror
-        // any effects for both directions
-        val pageOffset = calculateCurrentOffsetForPage(position).absoluteValue
-        ProductContent(
-            product = products[position],
-            modifier = Modifier.animatePage(pageOffset),
-            onProductClicked = {
-                navController.navigate(route = "${Screen.Product.route}/${products[position].id}")
-            },
+private fun HomeTabContent(category: HomeCategory, navController: NavController) {
+    val products = category.products
+    val tab = stringResource(id = category.category.tabName)
+
+    if (products.isEmpty())
+        Text(
+            text = "No $tab",
+            style = MaterialTheme.typography.labelSmall,
         )
-    }
+    else
+        HorizontalPager(
+            modifier = Modifier.padding(top = 50.dp),
+            count = products.size,
+            contentPadding = PaddingValues(start = 70.dp, end = 110.dp)
+        ) { position ->
+            // Calculate the absolute offset for the current page from the
+            // scroll position. We use the absolute value which allows us to mirror
+            // any effects for both directions
+            val pageOffset = calculateCurrentOffsetForPage(position).absoluteValue
+            ProductContent(
+                product = products[position],
+                modifier = Modifier.animatePage(pageOffset),
+                onProductClicked = {
+                    navController.navigate(route = "${Screen.Product.route}/${products[position].id}")
+                },
+            )
+        }
 }
 
 @Preview(showBackground = true)

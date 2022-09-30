@@ -24,7 +24,7 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 fun EmptyItems(
     imageId: Int,
     titleText: String,
-    descriptionText: String? = null,
+    subtitle: String? = null,
     buttonText: String? = null,
     onClickButton: (() -> Unit)? = null,
 ) {
@@ -38,10 +38,10 @@ fun EmptyItems(
             style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center
         )
-        if (descriptionText != null) {
+        if (subtitle != null) {
             VerticalSpacer(height = 20.dp)
             Text(
-                text = descriptionText,
+                text = subtitle,
                 style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -61,7 +61,7 @@ fun EmptyItemsPreview(){
         EmptyItems(
             imageId = R.drawable.sally_no_favorites,
             titleText = "No favorites yet",
-            descriptionText = "Hit the orange button down\n" +
+            subtitle = "Hit the orange button down\n" +
                     "below to Create an order",
             buttonText = "Start ordering",
             onClickButton = { }

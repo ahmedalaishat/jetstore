@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ import com.alaishat.ahmed.mobostore.ui.components.EmptyItems
 import com.alaishat.ahmed.mobostore.ui.components.ProductContent
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.headers.SearchHeader
+import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.screens.home.HomeViewModel
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.header
@@ -63,27 +65,36 @@ fun SearchScreen(
         if (uiState.searchInput.isNotEmpty())
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(vertical = 20.dp, horizontal = 24.dp),
-                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(top = 20.dp, bottom = 50.dp, start = 24.dp, end = 24.dp),
+                columns = GridCells.Adaptive(150.dp),
                 horizontalArrangement = Arrangement.spacedBy(35.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
+                var columnsCount = 2
+                // get the current lineSpan count to use it in offset calculation
+                item(
+                    span = {
+                        columnsCount = maxLineSpan
+                        GridItemSpan(this.maxLineSpan)
+                    },
+                    content = {})
+
                 header {
                     if (products.isNotEmpty())
                         Text(
-                            text = "Found  ${products.size} results",
+                            text = stringResource(R.string.found_results, products.size),
                             style = MaterialTheme.typography.headlineMedium,
                             modifier = Modifier.padding(vertical = 10.dp),
                             textAlign = TextAlign.Center
                         )
                 }
                 items(products.size) { position ->
-//                val offset = if (item % 2 == 0) 0.dp else 50.dp
-                    val absOffset = if (position % 2 == 0) 0.dp else 40.dp
+                    val absOffset = if (position % columnsCount == 0) 0.dp else 40.dp
                     ProductContent(
                         product = products[position],
                         modifier = Modifier.absoluteOffset(0.dp, absOffset),
                         showSecondaryText = false,
+                        onProductClicked = { navController.navigate(route = "${Screen.Product.route}/${products[position].id}") }
                     )
                 }
                 if (products.isEmpty())
@@ -100,9 +111,8 @@ fun SearchScreen(
 private fun NoItems() {
     EmptyItems(
         imageId = R.drawable.sally_no_items,
-        titleText = "Item not found",
-        descriptionText = "Try a more generic search term or try\n" +
-                "looking for alternative products.",
+        titleText = stringResource(R.string.search_empty_title),
+        subtitle = stringResource(R.string.search_empty_subtitle),
     )
 }
 

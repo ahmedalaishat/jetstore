@@ -7,25 +7,35 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
-import com.alaishat.ahmed.mobostore.data.products.appleAirPods
 import com.alaishat.ahmed.mobostore.ui.components.EmptyItems
 import com.alaishat.ahmed.mobostore.ui.components.ProductContent
 import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
+import com.alaishat.ahmed.mobostore.ui.navigation.Screen
+import com.alaishat.ahmed.mobostore.ui.screens.home.HomeViewModel
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
+import com.alaishat.ahmed.mobostore.utils.previousHiltViewModel
 
 /**
  * Created by Ahmed Al-Aishat on Aug/01/2022.
  * Mobo Store Project.
  */
 @Composable
-fun FavoritesScreen(navController: NavHostController) {
+fun FavoritesScreen(
+    navController: NavHostController,
+    homeViewModel: HomeViewModel = navController.previousHiltViewModel()
+) {
+    // UiState
+    val uiState by homeViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -33,33 +43,49 @@ fun FavoritesScreen(navController: NavHostController) {
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AppHeader("Favorites", onClickLeftIcon = { navController.popBackStack() })
+        AppHeader(stringResource(R.string.favorites), onClickLeftIcon = { navController.popBackStack() })
         LazyVerticalGrid(
-            modifier = Modifier.fillMaxHeight(),
-            contentPadding = PaddingValues(vertical = 20.dp),
-            columns = GridCells.Fixed(2),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(top = 20.dp, bottom = 50.dp, start = 24.dp, end = 24.dp),
+            columns = GridCells.Adaptive(150.dp),
+            horizontalArrangement = Arrangement.spacedBy(35.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            val count = 0
-            items(count) { item ->
-                val offset = if (item % 2 == 0) 0.dp else 50.dp
-                ProductContent(appleAirPods, Modifier.padding(top = offset, start = 35.dp, end = 35.dp))
+            var columnsCount = 2
+            // get the current lineSpan count to use it in offset calculation
+            item(
+                span = {
+                    columnsCount = maxLineSpan
+                    GridItemSpan(this.maxLineSpan)
+                },
+                content = {})
+
+            val favorites = uiState.homeCategories.flatMap { it.products }.filter { uiState.favorites.contains(it.id) }
+            items(favorites.size) { position ->
+                val absOffset = if (position % columnsCount == 0) 0.dp else 40.dp
+                ProductContent(
+                    product = favorites[position],
+                    modifier = Modifier.absoluteOffset(0.dp, absOffset),
+                    onProductClicked = { navController.navigate(route = "${Screen.Product.route}/${favorites[position].id}") }
+                )
             }
-            if (count == 0)
-                item(span = { GridItemSpan(this.maxLineSpan) }, content = { NoFavorites() })
+            if (favorites.isEmpty())
+                item(
+                    span = { GridItemSpan(this.maxLineSpan) },
+                    content = { NoFavorites { navController.popBackStack() } }
+                )
         }
     }
 }
 
 @Composable
-private fun NoFavorites() {
+private fun NoFavorites(onClickButton: () -> Unit) {
     EmptyItems(
         imageId = R.drawable.sally_no_favorites,
-        titleText = "No favorites yet",
-        descriptionText = "Hit the orange button down\n" +
-                "below to Create an order",
-        buttonText = "Start ordering",
-        onClickButton = { }
+        titleText = stringResource(R.string.favorites_title),
+        subtitle = stringResource(R.string.favorites_subtitle),
+        buttonText = stringResource(R.string.start_ordering),
+        onClickButton = onClickButton
     )
 }
 
