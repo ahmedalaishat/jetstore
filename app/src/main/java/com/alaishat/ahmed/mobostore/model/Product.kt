@@ -18,7 +18,9 @@ data class Product(
     val colors: List<ProductColor> = emptyList(),
     @DrawableRes val imageId: Int,
     val images: List<Int> = emptyList(),
-)
+) {
+    fun toBasketProduct() = BasketProduct(id, title, price, 1, imageId)
+}
 
 data class ProductColor(
     @StringRes val colorName: Int,

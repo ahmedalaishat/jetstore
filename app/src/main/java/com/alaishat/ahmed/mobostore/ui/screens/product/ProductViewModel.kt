@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.data.Result
 import com.alaishat.ahmed.mobostore.data.products.ProductsRepository
+import com.alaishat.ahmed.mobostore.data.products.homeCategories
 import com.alaishat.ahmed.mobostore.model.Product
 import com.alaishat.ahmed.mobostore.utils.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +29,7 @@ data class ProductUiState(
     val selectedColor: Int = -1,
     val isLoading: Boolean = true,
     val errorMessages: List<ErrorMessage> = emptyList(),
+    val addMessages: List<ErrorMessage> = emptyList(),
 )
 
 @HiltViewModel
@@ -89,6 +91,21 @@ class ProductViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Add product to basket
+     */
+    fun addToBasket(productId: Int) {
+        val isAdded =
+            productsRepository.addToBasket(homeCategories.flatMap { it.products }.first { it.id == productId })
+        _uiState.update {
+            val errorMessages = it.addMessages + ErrorMessage(
+                id = UUID.randomUUID().mostSignificantBits,
+                messageId = if (isAdded) R.string.item_added_to_basket else R.string.item_already_added_to_basket
+            )
+            it.copy(addMessages = errorMessages)
+        }
+    }
+
 
     /**
      * Select product color
@@ -102,10 +119,11 @@ class ProductViewModel @Inject constructor(
     /**
      * Notify that an error was displayed on the screen
      */
-    fun errorShown(errorId: Long) {
+    fun messageShown(errorId: Long) {
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
-            currentUiState.copy(errorMessages = errorMessages)
+            val addMessages = currentUiState.addMessages.filterNot { it.id == errorId }
+            currentUiState.copy(errorMessages = errorMessages, addMessages = addMessages)
         }
     }
 }

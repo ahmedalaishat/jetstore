@@ -1,11 +1,15 @@
 package com.alaishat.ahmed.mobostore.data.products.impl
 
 import com.alaishat.ahmed.mobostore.data.Result
+import com.alaishat.ahmed.mobostore.data.payment.visaCard
 import com.alaishat.ahmed.mobostore.data.products.ProductsRepository
 import com.alaishat.ahmed.mobostore.data.products.homeCategories
+import com.alaishat.ahmed.mobostore.model.BasketProduct
 import com.alaishat.ahmed.mobostore.model.HomeCategory
+import com.alaishat.ahmed.mobostore.model.PaymentMethod
 import com.alaishat.ahmed.mobostore.model.Product
 import com.alaishat.ahmed.mobostore.utils.addOrRemove
+import com.skydoves.whatif.whatIfMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +26,10 @@ class FakeProductsRepository @Inject constructor(
 ) : ProductsRepository {
 
     private val favorites = MutableStateFlow<Set<Int>>(setOf())
+
+    private val basketProducts = MutableStateFlow<List<BasketProduct>>(emptyList())
+
+    private val selectedPaymentMethod = MutableStateFlow(visaCard)
 
     override suspend fun getProduct(productId: Int): Result<Product> {
         return withContext(ioDispatcher) {
@@ -58,6 +66,46 @@ class FakeProductsRepository @Inject constructor(
         val set = favorites.value.toMutableSet()
         set.addOrRemove(productId)
         favorites.value = set
+    }
+
+    override fun observeBasket(): Flow<List<BasketProduct>> {
+        return basketProducts
+    }
+
+    override fun observeSelectedPaymentCard(): Flow<PaymentMethod> {
+        return selectedPaymentMethod
+    }
+
+    override fun addToBasket(product: Product): Boolean {
+        val set = basketProducts.value.toMutableList()
+        if (set.firstOrNull { it.id == product.id } != null) return false
+        set.add(product.toBasketProduct())
+        basketProducts.value = set
+        return true
+    }
+
+    override fun increaseBasketProductCount(productId: Int) {
+        val set = basketProducts.value.map { product ->
+            product.whatIfMap(
+                given = product.id == productId,
+                whatIf = { it.copy(count = it.count + 1) },
+                whatIfNot = { it })
+        }
+        basketProducts.value = set
+    }
+
+    override fun decreaseBasketProductCount(productId: Int) {
+        val set = basketProducts.value.map { product ->
+            product.whatIfMap(
+                given = product.id == productId,
+                whatIf = { it.copy(count = it.count - 1) },
+                whatIfNot = { it })
+        }
+        basketProducts.value = set
+    }
+
+    override fun selectPaymentMethod(paymentMethod: PaymentMethod) {
+        selectedPaymentMethod.value = paymentMethod
     }
 
 }

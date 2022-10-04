@@ -12,24 +12,28 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
+import com.alaishat.ahmed.mobostore.model.PaymentMethod
 import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
 import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
+import com.alaishat.ahmed.mobostore.ui.screens.basket.BasketViewModel
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import kotlinx.coroutines.CoroutineScope
@@ -41,8 +45,14 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun CheckoutScreen(navController: NavHostController, scope: CoroutineScope, modalState: ModalBottomSheetState) {
-//    val ctx = LocalContext.current
+fun CheckoutScreen(
+    navController: NavHostController,
+    scope: CoroutineScope,
+    modalState: ModalBottomSheetState,
+    basketViewModel: BasketViewModel = hiltViewModel()
+) {
+    val uiState by basketViewModel.uiState.collectAsState()
+    val total = uiState.basketProducts.sumOf { it.price * it.count }
 
     /// to handle back press when the sheet is opened
     BackHandler(modalState.isVisible) {
@@ -58,7 +68,7 @@ fun CheckoutScreen(navController: NavHostController, scope: CoroutineScope, moda
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AppHeader(
-            "Confirm and pay",
+            stringResource(id = R.string.confirm_and_pay),
             onClickLeftIcon = { navController.popBackStack() },
         )
         VerticalSpacer(height = 40.dp)
@@ -69,13 +79,13 @@ fun CheckoutScreen(navController: NavHostController, scope: CoroutineScope, moda
         ) {
             Row {
                 Text(
-                    text = "Shipping information",
+                    text = stringResource(R.string.shipping_information),
                     style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Start
                 )
                 Text(
-                    text = "change",
+                    text = stringResource(R.string.change),
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.End,
                     color = MaterialTheme.colorScheme.primary
@@ -85,24 +95,27 @@ fun CheckoutScreen(navController: NavHostController, scope: CoroutineScope, moda
             ShippingInfo()
             VerticalSpacer(height = 20.dp)
             Text(
-                text = "Payment Method",
+                text = stringResource(R.string.payment_method),
                 style = MaterialTheme.typography.labelMedium,
                 textAlign = TextAlign.Start
             )
             VerticalSpacer(height = 20.dp)
-            PaymentMethods()
+            PaymentMethods(
+                uiState.paymentMethods,
+                uiState.selectedPaymentCard
+            ) { basketViewModel.selectPaymentCard(it) }
             Spacer(modifier = Modifier.weight(1f))
             Row {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = "Total",
+                    text = stringResource(id = R.string.total),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = AppTypefaceTokens.WeightRegular),
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Start
                 )
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = "\$ 954",
+                    text = "\$ $total",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.End
@@ -110,7 +123,7 @@ fun CheckoutScreen(navController: NavHostController, scope: CoroutineScope, moda
             }
             VerticalSpacer(height = 50.dp)
             PrimaryButton(
-                text = "Confirm and pay",
+                text = stringResource(R.string.confirm_and_pay),
                 onClick = { scope.launch { modalState.animateTo(ModalBottomSheetValue.Expanded) } },
             )
             VerticalSpacer(height = 20.dp)
@@ -154,30 +167,31 @@ private fun ShippingInfoRow(iconId: Int, name: String) {
 
 @Composable
 private fun PaymentMethods(
-    radioOptions: List<Int> = listOf(R.drawable.visa, R.drawable.master, R.drawable.bank)
+    paymentMethods: List<PaymentMethod>,
+    selectedPaymentCard: PaymentMethod,
+    selectPaymentCard: (String) -> Unit,
 ) {
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[2]) }
     Card(Modifier.fillMaxWidth()) {
         Column {
-            radioOptions.forEach { imageId ->
+            paymentMethods.forEach { paymentCard ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .selectable(
-                            selected = (imageId == selectedOption),
-                            onClick = { onOptionSelected(imageId) }
+                            selected = (paymentCard == selectedPaymentCard),
+                            onClick = { selectPaymentCard(paymentCard.carNumber) }
                         )
                         .padding(vertical = 5.dp, horizontal = 5.dp),
                     verticalAlignment = CenterVertically
                 ) {
                     RadioButton(
-                        selected = (imageId == selectedOption),
-                        onClick = { onOptionSelected(imageId) }
+                        selected = (paymentCard == selectedPaymentCard),
+                        onClick = { selectPaymentCard(paymentCard.carNumber) }
                     )
-                    Image(painter = painterResource(id = imageId), contentDescription = "")
+                    Image(painter = painterResource(id = paymentCard.cardImage), contentDescription = "")
                     HorizontalSpacer(width = 16.dp)
                     Text(
-                        text = "**** **** **** 1234",
+                        text = paymentCard.carNumber,
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = AppTypefaceTokens.WeightRegular),
                         color = MaterialTheme.colorScheme.onSurface
                     )

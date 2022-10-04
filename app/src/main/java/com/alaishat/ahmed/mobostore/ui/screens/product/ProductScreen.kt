@@ -1,6 +1,5 @@
 package com.alaishat.ahmed.mobostore.ui.screens.product
 
-import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -28,6 +27,7 @@ import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
 import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.components.shape.Ball
+import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.screens.NoConnectionScreen
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
@@ -65,6 +65,7 @@ fun ProductScreen(
                 uiState,
                 { productViewModel.toggleFavourite() },
                 { productViewModel.selectColor(it) },
+                { productViewModel.addToBasket(it) }
             )
         else {
             if (uiState.errorMessages.isEmpty()) {
@@ -91,7 +92,7 @@ fun ProductScreen(
         // If refreshProduct or errorShown change while the LaunchedEffect is running,
         // don't restart the effect and use the latest lambda values.
         val onRefreshProductsState by rememberUpdatedState { productViewModel.refreshProduct() }
-        val onErrorDismissState by rememberUpdatedState { id: Long -> productViewModel.errorShown(id) }
+        val onErrorDismissState by rememberUpdatedState { id: Long -> productViewModel.messageShown(id) }
 
         // Effect running in a coroutine that displays the Snackbar on the screen
         // If there's a change to errorMessageText, retryMessageText or snackbarHostState,
@@ -108,6 +109,35 @@ fun ProductScreen(
             onErrorDismissState(errorMessage.id)
         }
     }
+    // Process one error message at a time and show them as Snackbars in the UI
+    if (uiState.addMessages.isNotEmpty()) {
+        // Remember the errorMessage to display on the screen
+        val addMessage = remember(uiState) { uiState.addMessages[0] }
+
+        // Get the text to show on the message from resources
+        val messageText: String = stringResource(addMessage.messageId)
+        val goToText = stringResource(id = R.string.basket)
+
+        // If refreshProduct or errorShown change while the LaunchedEffect is running,
+        // don't restart the effect and use the latest lambda values.
+        val onGoToBasketState by rememberUpdatedState { navController.navigate(route = Screen.Basket.route) }
+        val onErrorDismissState by rememberUpdatedState { id: Long -> productViewModel.messageShown(id) }
+
+        // Effect running in a coroutine that displays the Snackbar on the screen
+        // If there's a change to errorMessageText, retryMessageText or snackbarHostState,
+        // the previous effect will be cancelled and a new one will start with the new values
+        LaunchedEffect(messageText, goToText, snackbarHostState) {
+            val snackbarResult = snackbarHostState.showSnackbar(
+                message = messageText,
+                actionLabel = goToText
+            )
+            if (snackbarResult == SnackbarResult.ActionPerformed) {
+                onGoToBasketState()
+            }
+            // Once the message is displayed and dismissed, notify the ViewModel
+            onErrorDismissState(addMessage.id)
+        }
+    }
 }
 
 @Composable
@@ -116,6 +146,7 @@ private fun ProductInfoContent(
     uiState: ProductUiState,
     toggleFavourite: () -> Unit,
     selectColor: (Int) -> Unit,
+    addToBasket: (Int) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -213,12 +244,12 @@ private fun ProductInfoContent(
                     )
                 }
                 VerticalSpacer(height = 50.dp)
+                val message = stringResource(R.string.item_added_to_basket)
                 PrimaryButton(
-                    text = "Add to basket",
+                    text = stringResource(R.string.add_to_basket),
                     modifier = Modifier.align(CenterHorizontally),
                     onClick = {
-                        Toast.makeText(context, "Item added to basket", Toast.LENGTH_LONG).show()
-//                            navController.popBackStack()
+                        addToBasket(product.id)
                     },
                 )
             }

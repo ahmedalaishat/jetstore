@@ -1,7 +1,5 @@
-package com.alaishat.ahmed.mobostore.ui.components.modalsheets
+package com.alaishat.ahmed.mobostore.ui.modalsheets
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -13,18 +11,22 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
+import com.alaishat.ahmed.mobostore.ui.screens.basket.BasketViewModel
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
@@ -34,26 +36,31 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
  */
 @Composable
 @ExperimentalMaterialApi
-fun PaymentModal() {
-    val context = LocalContext.current
+fun PaymentModal(
+    basketViewModel: BasketViewModel = hiltViewModel()
+) {
+    val uiState by basketViewModel.uiState.collectAsState()
+    val productsCount = uiState.basketProducts.count()
+    val total = uiState.basketProducts.sumOf { it.price * it.count }
+
 
     VerticalSpacer(height = 20.dp)
     Column(Modifier.padding(horizontal = 50.dp, vertical = 20.dp)) {
         Row {
             Text(
-                text = "Confirm and pay",
+                text = stringResource(id = R.string.confirm_and_pay),
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Start
             )
             Text(
                 buildAnnotatedString {
-                    append("Products:")
+                    append(stringResource(R.string.products))
                     withStyle(
                         style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurface)
                             .toSpanStyle()
                     ) {
-                        append(" 2")
+                        append(" $productsCount")
                     }
                 },
                 style = MaterialTheme.typography.labelSmall,
@@ -71,16 +78,19 @@ fun PaymentModal() {
             Column(Modifier.padding(vertical = 25.dp, horizontal = 15.dp)) {
                 Row {
                     Text(
-                        text = "My credit card",
+                        text = stringResource(R.string.my_credit_card),
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = AppTypefaceTokens.WeightRegular),
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Start,
                     )
-                    Image(painter = painterResource(id = R.drawable.visa), contentDescription = "")
+                    Image(
+                        painter = painterResource(id = uiState.selectedPaymentCard.cardImage),
+                        contentDescription = ""
+                    )
                 }
                 VerticalSpacer(height = 15.dp)
                 Text(
-                    text = "**** **** **** 1234",
+                    text = uiState.selectedPaymentCard.carNumber,
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = AppTypefaceTokens.WeightRegular),
                     textAlign = TextAlign.Start,
                 )
@@ -106,25 +116,24 @@ fun PaymentModal() {
         Row {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Total",
+                text = stringResource(id = R.string.total),
                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = AppTypefaceTokens.WeightRegular),
                 textAlign = TextAlign.Start
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text = "\$ 954",
+                text = "\$ $total",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.End
             )
         }
         VerticalSpacer(height = 40.dp)
-        PrimaryButton(text = "Pay now", onClick = { pay(context) })
+        PrimaryButton(text = stringResource(R.string.pay_now), onClick = { pay() })
     }
 }
 
-fun pay(context: Context) {
-    Toast.makeText(context, "Error occurred", Toast.LENGTH_SHORT).show()
+fun pay() {
 }
 
 @OptIn(ExperimentalMaterialApi::class)

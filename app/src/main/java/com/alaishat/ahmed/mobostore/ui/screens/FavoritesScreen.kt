@@ -82,7 +82,7 @@ fun FavoritesScreen(
 private fun NoFavorites(onClickButton: () -> Unit) {
     EmptyItems(
         imageId = R.drawable.sally_no_favorites,
-        titleText = stringResource(R.string.favorites_title),
+        titleText = stringResource(R.string.favorites_empty_title),
         subtitle = stringResource(R.string.favorites_subtitle),
         buttonText = stringResource(R.string.start_ordering),
         onClickButton = onClickButton

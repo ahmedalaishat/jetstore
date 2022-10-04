@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.data.Result
 import com.alaishat.ahmed.mobostore.data.products.ProductsRepository
+import com.alaishat.ahmed.mobostore.data.products.homeCategories
 import com.alaishat.ahmed.mobostore.model.HomeCategory
 import com.alaishat.ahmed.mobostore.model.Product
 import com.alaishat.ahmed.mobostore.utils.ErrorMessage

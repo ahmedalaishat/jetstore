@@ -29,7 +29,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.ui.components.MoboSnackbarHost
-import com.alaishat.ahmed.mobostore.ui.components.modalsheets.PaymentModal
+import com.alaishat.ahmed.mobostore.ui.modalsheets.PaymentModal
 import com.alaishat.ahmed.mobostore.ui.components.navigation.BottomBar
 import com.alaishat.ahmed.mobostore.ui.components.navigation.DrawerContent
 import com.alaishat.ahmed.mobostore.ui.navigation.AppNavHost

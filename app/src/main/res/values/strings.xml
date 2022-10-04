@@ -27,11 +27,27 @@
     <string name="Home_title">Order online\ncollect in store</string>
 
     <string name="favorites">Favorites</string>
-    <string name="favorites_title">No favorites yet</string>
-    <string name="favorites_subtitle">Hit the orange button down\nbelow to Create an order</string>
+    <string name="favorites_empty_title">No favorites yet</string>
+    <string name="basket_empty_title">Basket empty</string>
+    <string name="favorites_subtitle">Hit the button down\nbelow to Create an order</string>
     <string name="start_ordering">Start ordering</string>
 
     <string name="search_empty_title">Item not found</string>
     <string name="search_empty_subtitle">Try a more generic search term or try\nlooking for alternative products.</string>
     <string name="found_results">Found %s results</string>
+    <string name="basket">Basket</string>
+    <string name="basket_hint">Delivery for FREE until the end of the month</string>
+    <string name="total">Total</string>
+    <string name="checkout">Checkout</string>
+    <string name="quantity">Quantity</string>
+    <string name="add_to_basket">Add to basket</string>
+    <string name="item_added_to_basket">Item added to basket</string>
+    <string name="item_already_added_to_basket">Item already added to basket</string>
+    <string name="confirm_and_pay">Confirm and pay</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="change">change</string>
+    <string name="shipping_information">Shipping information</string>
+    <string name="pay_now">Pay now</string>
+    <string name="my_credit_card">My credit card</string>
+    <string name="products">Products:</string>
 </resources>
