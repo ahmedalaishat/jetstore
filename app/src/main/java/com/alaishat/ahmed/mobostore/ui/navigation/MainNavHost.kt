@@ -25,7 +25,6 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    modalBottomSheetState: ModalBottomSheetState,
     openDrawer: () -> Any,
     login: () -> Any,
     scope: CoroutineScope,
@@ -44,7 +43,7 @@ fun AppNavHost(
         composable(Screen.Favorites.route) { FavoritesScreen(navController) }
         composable(Screen.Profile.route) { ProfileScreen(navController) }
         composable(Screen.Basket.route) { BasketScreen(navController) }
-        composable(Screen.Checkout.route) { CheckoutScreen(navController, scope, modalBottomSheetState) }
+        composable(Screen.Checkout.route) { CheckoutScreen(navController, scope) }
         composable(
             route = "${Screen.Product.route}/{productId}",
             arguments = listOf(navArgument("productId") { type = NavType.IntType })

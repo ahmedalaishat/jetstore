@@ -11,8 +11,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -22,11 +20,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
-import com.alaishat.ahmed.mobostore.ui.screens.basket.BasketViewModel
+import com.alaishat.ahmed.mobostore.ui.screens.basket.BasketUiState
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
@@ -37,11 +34,10 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 @Composable
 @ExperimentalMaterialApi
 fun PaymentModal(
-    basketViewModel: BasketViewModel = hiltViewModel()
+    basketState: BasketUiState
 ) {
-    val uiState by basketViewModel.uiState.collectAsState()
-    val productsCount = uiState.basketProducts.count()
-    val total = uiState.basketProducts.sumOf { it.price * it.count }
+    val productsCount = basketState.basketProducts.count()
+    val total = basketState.basketProducts.sumOf { it.price * it.count }
 
 
     VerticalSpacer(height = 20.dp)
@@ -84,13 +80,13 @@ fun PaymentModal(
                         textAlign = TextAlign.Start,
                     )
                     Image(
-                        painter = painterResource(id = uiState.selectedPaymentCard.cardImage),
+                        painter = painterResource(id = basketState.selectedPaymentCard.cardImage),
                         contentDescription = ""
                     )
                 }
                 VerticalSpacer(height = 15.dp)
                 Text(
-                    text = uiState.selectedPaymentCard.carNumber,
+                    text = basketState.selectedPaymentCard.carNumber,
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = AppTypefaceTokens.WeightRegular),
                     textAlign = TextAlign.Start,
                 )
@@ -141,6 +137,6 @@ fun pay() {
 @Composable
 fun PaymentModalPreview() {
     MoboStoreTheme {
-        PaymentModal()
+        PaymentModal(BasketUiState())
     }
 }

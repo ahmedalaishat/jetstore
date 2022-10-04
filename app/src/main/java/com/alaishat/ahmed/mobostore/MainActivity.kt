@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
@@ -29,7 +28,6 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.ui.components.MoboSnackbarHost
-import com.alaishat.ahmed.mobostore.ui.modalsheets.PaymentModal
 import com.alaishat.ahmed.mobostore.ui.components.navigation.BottomBar
 import com.alaishat.ahmed.mobostore.ui.components.navigation.DrawerContent
 import com.alaishat.ahmed.mobostore.ui.navigation.AppNavHost
@@ -57,7 +55,6 @@ class MainActivity : ComponentActivity() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
 
-            val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
             val snackbarHostState = remember { SnackbarHostState() }
@@ -87,54 +84,46 @@ class MainActivity : ComponentActivity() {
 
             MoboStoreTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                    // AHMED_TODO move me to payment screen
-                    ModalBottomSheetLayout(
-                        sheetContent = { PaymentModal() },
-                        sheetState = modalBottomSheetState,
-                        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                    ModalNavigationDrawer(
+                        drawerState = drawerState,
+                        drawerContent = {
+                            DrawerContent(navController, closeDrawer, logout)
+                        },
+                        drawerContainerColor = Color.Transparent,
+                        scrimColor = Color.Transparent,
+                        gesturesEnabled = drawerState.isOpen,
+                        drawerContentColor = MaterialTheme.colorScheme.onPrimary,
                     ) {
-                        ModalNavigationDrawer(
-                            drawerState = drawerState,
-                            drawerContent = {
-                                DrawerContent(navController, closeDrawer, logout)
+                        if (drawerInitOffset != 0f)
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                painter = painterResource(id = R.drawable.bg_menu),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds
+                            )
+                        Scaffold(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .scale(scaffoldScale)
+                                .absoluteOffset(x = scaffoldOffset.dp)
+                                .advancedShadow(Color.White, 0.1f, scaffoldRadius, 1.dp, 24.dp, (-24).dp)
+                                .clip(RoundedCornerShape(scaffoldRadius))
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(scaffoldPadding),
+                            bottomBar = {
+                                BottomBar(navController = navController, showBottomBar)
                             },
-                            drawerContainerColor = Color.Transparent,
-                            scrimColor = Color.Transparent,
-                            gesturesEnabled = drawerState.isOpen,
-                            drawerContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ) {
-                            if (drawerInitOffset != 0f)
-                                Image(
-                                    modifier = Modifier.fillMaxSize(),
-                                    painter = painterResource(id = R.drawable.bg_menu),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillBounds
-                                )
-                            Scaffold(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .scale(scaffoldScale)
-                                    .absoluteOffset(x = scaffoldOffset.dp)
-                                    .advancedShadow(Color.White, 0.1f, scaffoldRadius, 1.dp, 24.dp, (-24).dp)
-                                    .clip(RoundedCornerShape(scaffoldRadius))
-                                    .background(MaterialTheme.colorScheme.background)
-                                    .padding(scaffoldPadding),
-                                bottomBar = {
-                                    BottomBar(navController = navController, showBottomBar)
-                                },
-                                snackbarHost = { MoboSnackbarHost(hostState = snackbarHostState) }
-                            ) { innerPadding ->
-                                AppNavHost(
-                                    navController = navController,
-                                    modalBottomSheetState = modalBottomSheetState,
-                                    openDrawer = openDrawer,
-                                    login = login,
-                                    scope = scope,
-                                    startDestination = Screen.getStartDestination(loggedIn).route,
-                                    innerPadding = innerPadding,
-                                    snackbarHostState = snackbarHostState,
-                                )
-                            }
+                            snackbarHost = { MoboSnackbarHost(hostState = snackbarHostState) }
+                        ) { innerPadding ->
+                            AppNavHost(
+                                navController = navController,
+                                openDrawer = openDrawer,
+                                login = login,
+                                scope = scope,
+                                startDestination = Screen.getStartDestination(loggedIn).route,
+                                innerPadding = innerPadding,
+                                snackbarHostState = snackbarHostState,
+                            )
                         }
                     }
                 }

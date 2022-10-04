@@ -6,11 +6,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +35,8 @@ import com.alaishat.ahmed.mobostore.ui.components.HorizontalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
 import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
+import com.alaishat.ahmed.mobostore.ui.modalsheets.PaymentModal
+import com.alaishat.ahmed.mobostore.ui.screens.basket.BasketUiState
 import com.alaishat.ahmed.mobostore.ui.screens.basket.BasketViewModel
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
@@ -48,11 +52,11 @@ import kotlinx.coroutines.launch
 fun CheckoutScreen(
     navController: NavHostController,
     scope: CoroutineScope,
-    modalState: ModalBottomSheetState,
     basketViewModel: BasketViewModel = hiltViewModel()
 ) {
-    val uiState by basketViewModel.uiState.collectAsState()
-    val total = uiState.basketProducts.sumOf { it.price * it.count }
+    val modalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+
+    val basketState by basketViewModel.uiState.collectAsState()
 
     /// to handle back press when the sheet is opened
     BackHandler(modalState.isVisible) {
@@ -60,6 +64,31 @@ fun CheckoutScreen(
             modalState.animateTo(ModalBottomSheetValue.Hidden)
         }
     }
+
+    ModalBottomSheetLayout(
+        sheetContent = { PaymentModal(basketState) },
+        sheetState = modalState,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+    ) {
+        ScreenContent(
+            basketState = basketState,
+            scope = scope,
+            modalState = modalState,
+            selectPaymentCard = { basketViewModel.selectPaymentCard(it) },
+            onClickLeftIcon = { navController.popBackStack() })
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun ScreenContent(
+    basketState: BasketUiState,
+    scope: CoroutineScope,
+    modalState: ModalBottomSheetState,
+    selectPaymentCard: (String) -> Unit,
+    onClickLeftIcon: () -> Unit,
+) {
+    val total = basketState.basketProducts.sumOf { it.price * it.count }
 
     Column(
         modifier = Modifier
@@ -69,7 +98,7 @@ fun CheckoutScreen(
     ) {
         AppHeader(
             stringResource(id = R.string.confirm_and_pay),
-            onClickLeftIcon = { navController.popBackStack() },
+            onClickLeftIcon = onClickLeftIcon,
         )
         VerticalSpacer(height = 40.dp)
         Column(
@@ -101,9 +130,10 @@ fun CheckoutScreen(
             )
             VerticalSpacer(height = 20.dp)
             PaymentMethods(
-                uiState.paymentMethods,
-                uiState.selectedPaymentCard
-            ) { basketViewModel.selectPaymentCard(it) }
+                basketState.paymentMethods,
+                basketState.selectedPaymentCard,
+                selectPaymentCard
+            )
             Spacer(modifier = Modifier.weight(1f))
             Row {
                 Text(
@@ -209,7 +239,6 @@ fun CheckoutPreview() {
         CheckoutScreen(
             rememberNavController(),
             rememberCoroutineScope(),
-            rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
         )
     }
 }

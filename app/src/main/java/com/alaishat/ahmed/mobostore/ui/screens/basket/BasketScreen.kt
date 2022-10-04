@@ -63,39 +63,36 @@ fun BasketScreen(
             onClickLeftIcon = { navController.popBackStack() },
             rightIconId = R.drawable.ic_delete,
             onClickRightIcon = {})
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 10.dp)
+                .background(
+                    color = Color(0xFFD3F2FF),
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(12.dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            Image(painter = painterResource(id = R.drawable.ic_notification), contentDescription = "")
+            HorizontalSpacer(width = 4.dp)
+            Text(
+                text = stringResource(R.string.basket_hint),
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontSize = 10.sp,
+                    shadow = Shadow(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                        offset = Offset(0.0f, 10.0f),
+                        blurRadius = 10f
+                    )
+                ),
+            )
+        }
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            item {
-                VerticalSpacer(height = 30.dp)
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .background(
-                            color = Color(0xFFD3F2FF),
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(painter = painterResource(id = R.drawable.ic_notification), contentDescription = "")
-                    HorizontalSpacer(width = 4.dp)
-                    Text(
-                        text = stringResource(R.string.basket_hint),
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontSize = 10.sp,
-                            shadow = Shadow(
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                                offset = Offset(0.0f, 10.0f),
-                                blurRadius = 10f
-                            )
-                        ),
-                    )
-                }
-            }
-
             if (uiState.basketProducts.isEmpty())
                 item(
 //                    span = { GridItemSpan(this.maxLineSpan) },
@@ -115,8 +112,9 @@ fun BasketScreen(
 
                 item {
                     Column(
-                        Modifier.padding(horizontal = 50.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        Modifier.padding(horizontal = 50.dp).weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Bottom
                     ) {
                         VerticalSpacer(height = 20.dp)
                         Row {
