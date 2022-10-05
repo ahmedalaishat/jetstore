@@ -111,7 +111,9 @@ fun BasketScreen(
 
                 item {
                     Column(
-                        Modifier.padding(horizontal = 50.dp).weight(1f),
+                        Modifier
+                            .padding(horizontal = 50.dp)
+                            .weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Bottom
                     ) {
@@ -150,7 +152,7 @@ private fun NoProducts(onClickButton: () -> Unit) {
     EmptyItems(
         imageId = R.drawable.sally_no_favorites,
         titleText = stringResource(R.string.basket_empty_title),
-        subtitle = stringResource(R.string.favorites_subtitle),
+        subtitle = stringResource(R.string.favorites_empty_subtitle),
         buttonText = stringResource(R.string.start_ordering),
         onClickButton = onClickButton
     )

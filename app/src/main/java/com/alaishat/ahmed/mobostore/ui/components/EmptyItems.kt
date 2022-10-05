@@ -56,7 +56,7 @@ fun EmptyItems(
 
 @Composable
 @Preview
-fun EmptyItemsPreview(){
+fun EmptyItemsPreview() {
     MoboStoreTheme {
         EmptyItems(
             imageId = R.drawable.sally_no_favorites,

@@ -29,7 +29,7 @@
     <string name="favorites">Favorites</string>
     <string name="favorites_empty_title">No favorites yet</string>
     <string name="basket_empty_title">Basket empty</string>
-    <string name="favorites_subtitle">Hit the button down\nbelow to Create an order</string>
+    <string name="favorites_empty_subtitle">Hit the button down\nbelow to Create an order</string>
     <string name="start_ordering">Start ordering</string>
 
     <string name="search_empty_title">Item not found</string>
@@ -50,4 +50,25 @@
     <string name="pay_now">Pay now</string>
     <string name="my_credit_card">My credit card</string>
     <string name="products">Products:</string>
+
+    <string name="user_not_found">User not found</string>
+    <string name="login">Login</string>
+    <string name="create_account">Create account</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="passowrd">Password</string>
+    <string name="email">Email</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="hide">Hide</string>
+    <string name="show">Show</string>
+
+    <string name="invalid_email">Invalid email address</string>
+    <string name="email_required">Email is required</string>
+    <string name="password_required">Password is required</string>
+    <string name="my_profile">My profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="shopping_address">Shopping address</string>
+    <string name="order_history">Order history</string>
+    <string name="cards">Cards</string>
+    <string name="notifications">Notifications</string>
+    <string name="history_empty_title">No history yet</string>
 </resources>

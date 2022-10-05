@@ -34,8 +34,8 @@ class FakeProductsRepository @Inject constructor(
     override suspend fun getProduct(productId: Int): Result<Product> {
         return withContext(ioDispatcher) {
             delay(800) // pretend we're on a slow network
-            val product: Product? = null
-//            val product = homeCategories.flatMap { it.products }.find { product -> product.id == productId }
+//            val product: Product? = null
+            val product = homeCategories.flatMap { it.products }.find { product -> product.id == productId }
             if (product == null) {
                 Result.Error(IllegalArgumentException("Unable to find product"))
             } else {

@@ -48,7 +48,8 @@ fun AppTextField(
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    isError: Boolean = false,
+    errorMsgId: String = "",
+    isError: Boolean = errorMsgId.isNotEmpty(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -56,7 +57,7 @@ fun AppTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.filledShape,
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors()
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
 ) {
     // If color is not provided via the text style, use content color as a default
     val textColor = textStyle.color.takeOrElse {
@@ -102,6 +103,14 @@ fun AppTextField(
                         contentPadding = appTextFieldPadding()
                     )
                 }
+            )
+        }
+        if (isError) {
+            Text(
+                text = errorMsgId,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.padding(start = 16.dp)
             )
         }
     }

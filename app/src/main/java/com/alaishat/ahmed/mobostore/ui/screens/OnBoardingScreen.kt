@@ -20,7 +20,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
-import com.alaishat.ahmed.mobostore.ui.components.buttons.AppButton
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme

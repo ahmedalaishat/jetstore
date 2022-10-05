@@ -1,5 +1,6 @@
 package com.alaishat.ahmed.mobostore.data.products
 
+import com.alaishat.ahmed.mobostore.data.Repository
 import com.alaishat.ahmed.mobostore.data.Result
 import com.alaishat.ahmed.mobostore.model.BasketProduct
 import com.alaishat.ahmed.mobostore.model.HomeCategory
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
  * Created by Ahmed Al-Aishat on Sep/28/2022.
  * Mobo Store Project.
  */
-interface ProductsRepository {
+interface ProductsRepository : Repository {
 
     /**
      * Get product by id.

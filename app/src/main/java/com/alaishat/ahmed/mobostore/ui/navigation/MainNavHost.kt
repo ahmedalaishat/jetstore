@@ -14,7 +14,9 @@ import androidx.navigation.navArgument
 import com.alaishat.ahmed.mobostore.ui.screens.*
 import com.alaishat.ahmed.mobostore.ui.screens.basket.BasketScreen
 import com.alaishat.ahmed.mobostore.ui.screens.home.HomeScreen
+import com.alaishat.ahmed.mobostore.ui.screens.login.LoginScreen
 import com.alaishat.ahmed.mobostore.ui.screens.product.ProductScreen
+import com.alaishat.ahmed.mobostore.ui.screens.profile.ProfileScreen
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -26,7 +28,6 @@ import kotlinx.coroutines.CoroutineScope
 fun AppNavHost(
     navController: NavHostController,
     openDrawer: () -> Any,
-    login: () -> Any,
     scope: CoroutineScope,
     startDestination: String,
     innerPadding: PaddingValues,
@@ -38,7 +39,7 @@ fun AppNavHost(
         modifier = Modifier.padding(innerPadding),
     ) {
         composable(Screen.OnBoarding.route) { OnBoardingScreen(navController) }
-        composable(Screen.Login.route) { LoginScreen(navController, login) }
+        composable(Screen.Login.route) { LoginScreen() }
         composable(Screen.Home.route) { HomeScreen(navController, openDrawer, snackbarHostState) }
         composable(Screen.Favorites.route) { FavoritesScreen(navController) }
         composable(Screen.Profile.route) { ProfileScreen(navController) }

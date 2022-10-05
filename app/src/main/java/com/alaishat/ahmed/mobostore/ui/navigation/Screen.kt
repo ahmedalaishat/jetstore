@@ -62,7 +62,7 @@ sealed class Screen(
     object OrderHistory : Screen("OrderHistory")
     object NoConnection : Screen("NoConnection")
 
-    fun getDrawableId(selected:Boolean): Int? {
+    fun getDrawableId(selected: Boolean): Int? {
         return if (selected) selectedDrawableId else drawableId
     }
 

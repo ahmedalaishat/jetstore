@@ -3,13 +3,12 @@ package com.alaishat.ahmed.mobostore
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,6 +31,7 @@ import com.alaishat.ahmed.mobostore.ui.components.navigation.BottomBar
 import com.alaishat.ahmed.mobostore.ui.components.navigation.DrawerContent
 import com.alaishat.ahmed.mobostore.ui.navigation.AppNavHost
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
+import com.alaishat.ahmed.mobostore.ui.screens.login.LoginViewModel
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.advancedShadow
 import com.alaishat.ahmed.mobostore.utils.animateClose
@@ -43,6 +43,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val loginViewModel: LoginViewModel by viewModels()
+
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +61,8 @@ class MainActivity : ComponentActivity() {
 
             val snackbarHostState = remember { SnackbarHostState() }
 
-            var loggedIn by remember { mutableStateOf(true) } // AHMED_TODO check if the user is logged in
+            val authState by loginViewModel.uiState.collectAsState()
+            val loggedIn = authState.isLoggedIn() // AHMED_TODO check if the user is logged in
             val showBottomBar = rememberSaveable { (mutableStateOf(loggedIn)) }
             var drawerInitOffset by remember { mutableStateOf(0f) }
 
@@ -77,10 +80,9 @@ class MainActivity : ComponentActivity() {
                 systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = darkIcons)
             }
 
-            val openDrawer = { scope.launch { drawerState.animateOpen() } }
-            val closeDrawer = { scope.launch { drawerState.animateClose() } }
-            val login = { loggedIn = true }
-            val logout = { loggedIn = false }
+            val openDrawer by rememberUpdatedState { scope.launch { drawerState.animateOpen() } }
+            val closeDrawer by rememberUpdatedState { scope.launch { drawerState.animateClose() } }
+            val logout by rememberUpdatedState { loginViewModel.logout() }
 
             MoboStoreTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -118,7 +120,6 @@ class MainActivity : ComponentActivity() {
                             AppNavHost(
                                 navController = navController,
                                 openDrawer = openDrawer,
-                                login = login,
                                 scope = scope,
                                 startDestination = Screen.getStartDestination(loggedIn).route,
                                 innerPadding = innerPadding,

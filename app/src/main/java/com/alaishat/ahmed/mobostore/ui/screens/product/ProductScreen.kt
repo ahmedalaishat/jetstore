@@ -97,9 +97,9 @@ fun ProductScreen(
         else {
 //            if (uiState.errorMessages.isEmpty()) {
 //                // if there are no products, and no error, let the user refresh manually
-                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    NoConnectionScreen { productViewModel.refreshProduct() }
-                }
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                NoConnectionScreen { productViewModel.refreshProduct() }
+            }
 //            } else {
 //                // there's currently an error showing, don't show any content
 //                Box(Modifier.fillMaxSize()) { /* empty screen */ }

@@ -1,7 +1,5 @@
-package com.alaishat.ahmed.mobostore.ui.screens
+package com.alaishat.ahmed.mobostore.ui.screens.login
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,22 +28,20 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.rememberNavController
+import com.alaishat.ahmed.mobostore.MainActivity
 import com.alaishat.ahmed.mobostore.R
 import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
-import com.alaishat.ahmed.mobostore.ui.components.buttons.AppButton
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
-import com.alaishat.ahmed.mobostore.ui.components.navigation.navigate
 import com.alaishat.ahmed.mobostore.ui.components.textfields.AppTextField
 import com.alaishat.ahmed.mobostore.ui.components.texts.AppClickableText
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
-import kotlinx.coroutines.delay
+import com.alaishat.ahmed.mobostore.utils.getActivity
+import com.alaishat.ahmed.mobostore.utils.optStringResource
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 
 /**
  * Created by Ahmed Al-Aishat on Jul/31/2022.
@@ -53,11 +49,13 @@ import kotlinx.coroutines.withTimeout
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(navController: NavHostController, login: () -> Any) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var loading by remember { mutableStateOf(false) }
-    var scope = rememberCoroutineScope()
+fun LoginScreen(
+    loginViewModel: LoginViewModel = hiltViewModel(LocalContext.current.getActivity<MainActivity>()!!)
+) {
+    val scope = rememberCoroutineScope()
+    val login by rememberUpdatedState { loginViewModel.login() }
+
+    val uiState by loginViewModel.uiState.collectAsState()
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     val passwordTransformation =
@@ -84,7 +82,7 @@ fun LoginScreen(navController: NavHostController, login: () -> Any) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 50.dp),
-                text = "Welcome back",
+                text = stringResource(R.string.welcome_back),
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.displayLarge
             )
@@ -105,23 +103,25 @@ fun LoginScreen(navController: NavHostController, login: () -> Any) {
                 ) {
                     VerticalSpacer(height = 36.dp)
                     Text(
-                        text = "Login",
+                        text = stringResource(id = R.string.login),
                         modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                     )
                     VerticalSpacer(height = 45.dp)
                     AppTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = "Email",
+                        value = uiState.loginEmail,
+                        onValueChange = { loginViewModel.onUpdateEmail(it) },
+                        label = stringResource(R.string.email),
+                        errorMsgId = optStringResource(id = uiState.loginEmailError),
                         labelIconId = R.drawable.ic_email,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next)
                     )
                     VerticalSpacer(height = 45.dp)
                     AppTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = "Password",
+                        value = uiState.loginPassword,
+                        onValueChange = { loginViewModel.onUpdatePassword(it) },
+                        label = stringResource(R.string.passowrd),
+                        errorMsgId = optStringResource(id = uiState.loginPasswordError),
                         labelIconId = R.drawable.ic_password,
                         visualTransformation = passwordTransformation,
                         keyboardOptions = KeyboardOptions(
@@ -130,7 +130,8 @@ fun LoginScreen(navController: NavHostController, login: () -> Any) {
                         ),
                         keyboardActions = KeyboardActions(
                             onGo = {
-                                navigate(ctx, navController, keyboardController)
+                                keyboardController?.hide()
+//                                navigate(ctx, navController, keyboardController)
                                 login()
                             }),
                         trailingIcon = {
@@ -141,7 +142,7 @@ fun LoginScreen(navController: NavHostController, login: () -> Any) {
                     )
                     VerticalSpacer(height = 24.dp)
                     AppClickableText(
-                        text = "Forgot password?",
+                        text = stringResource(R.string.forgot_password),
                         onClick = {},
                         style = MaterialTheme.typography.labelSmall,
                     )
@@ -150,18 +151,19 @@ fun LoginScreen(navController: NavHostController, login: () -> Any) {
                 PrimaryButton(
                     onClick = {
                         scope.launch {
-                            loading = true
-                            delay(2000)
-                            loading = false
-                            navigate(ctx, navController, keyboardController)
+//                            loading = true
+//                            delay(2000)
+//                            loading = false
+                            keyboardController?.hide()
+//                            navigate(ctx, navController, keyboardController)
                             login()
                         }
                     },
-                    text = "Login",
-                    loading = loading
+                    text = stringResource(R.string.login),
+                    loading = uiState.isLoading
                 )
                 VerticalSpacer(height = 20.dp)
-                AppClickableText(text = "Create account", onClick = {})
+                AppClickableText(text = stringResource(R.string.create_account), onClick = {})
                 VerticalSpacer(height = 20.dp)
             }
         }
@@ -170,19 +172,12 @@ fun LoginScreen(navController: NavHostController, login: () -> Any) {
 
 @Composable
 private fun PasswordTrailingIcon(passwordVisible: Boolean, onClick: (Int) -> Unit) {
-    val description = if (passwordVisible) "Hide" else "Show"
+    val description = if (passwordVisible) R.string.hide else R.string.show
     AppClickableText(
-        text = description,
+        text = stringResource(description),
         onClick = onClick,
         style = MaterialTheme.typography.labelSmall,
     )
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-private fun navigate(ctx: Context, navController: NavController, keyboardController: SoftwareKeyboardController?) {
-    keyboardController?.hide()
-    Toast.makeText(ctx, "Logged In", Toast.LENGTH_LONG).show()
-    gotoHome(navController)
 }
 
 private fun gotoHome(navController: NavController) {
@@ -194,6 +189,6 @@ private fun gotoHome(navController: NavController) {
 @Composable
 fun LoginPreview() {
     MoboStoreTheme {
-        LoginScreen(rememberNavController()) {}
+        LoginScreen(hiltViewModel())
     }
 }

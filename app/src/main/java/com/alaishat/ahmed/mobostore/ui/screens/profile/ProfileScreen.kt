@@ -1,4 +1,4 @@
-package com.alaishat.ahmed.mobostore.ui.screens
+package com.alaishat.ahmed.mobostore.ui.screens.profile
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -8,14 +8,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.alaishat.ahmed.mobostore.R
@@ -31,7 +35,12 @@ import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
  * Mobo Store Project.
  */
 @Composable
-fun ProfileScreen(navController: NavHostController) {
+fun ProfileScreen(
+    navController: NavHostController,
+    homeViewModel: ProfileViewModel = hiltViewModel(),
+) {
+    val uiState by homeViewModel.uiState.collectAsState()
+
 
     Column(
         modifier = Modifier
@@ -49,7 +58,7 @@ fun ProfileScreen(navController: NavHostController) {
         ) {
             VerticalSpacer(height = 40.dp)
             Text(
-                text = "My profile",
+                text = stringResource(R.string.my_profile),
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier
                     .align(Alignment.Start)
@@ -64,7 +73,7 @@ fun ProfileScreen(navController: NavHostController) {
                 ) {
                     VerticalSpacer(height = 60.dp)
                     Text(
-                        text = "Ahmed Al-Aishat",
+                        text = uiState.user?.fullName() ?: "",
                         style = MaterialTheme.typography.labelMedium,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
@@ -85,9 +94,7 @@ fun ProfileScreen(navController: NavHostController) {
                             tint = Color.Unspecified
                         )
                         Text(
-                            text = "Address: Ibn Asaker Road\n" +
-                                    "M13 4GR\n" +
-                                    "Damascus, Syria",
+                            text = uiState.user?.address?.toString() ?: "",
                             style = MaterialTheme.typography.labelSmall.copy(fontWeight = AppTypefaceTokens.WeightRegular),
                             modifier = Modifier
                                 .weight(1f),
@@ -106,19 +113,19 @@ fun ProfileScreen(navController: NavHostController) {
                 )
             }
             VerticalSpacer(height = 24.dp)
-            ProfileListItem("Edit Profile") {
+            ProfileListItem(stringResource(R.string.edit_profile)) {
                 navController.navigate(Screen.NoConnection.route)
             }
             VerticalSpacer(height = 24.dp)
-            ProfileListItem("Shopping address") {}
-            VerticalSpacer(height = 24.dp)
-            ProfileListItem("Order history") {
+            ProfileListItem(stringResource(R.string.order_history)) {
                 navController.navigate(Screen.OrderHistory.route)
             }
             VerticalSpacer(height = 24.dp)
-            ProfileListItem("Cards") {}
+            ProfileListItem(stringResource(R.string.shopping_address)) {}
             VerticalSpacer(height = 24.dp)
-            ProfileListItem("Notifications") {}
+            ProfileListItem(stringResource(R.string.cards)) {}
+            VerticalSpacer(height = 24.dp)
+            ProfileListItem(stringResource(R.string.notifications)) {}
             VerticalSpacer(height = 24.dp)
         }
     }

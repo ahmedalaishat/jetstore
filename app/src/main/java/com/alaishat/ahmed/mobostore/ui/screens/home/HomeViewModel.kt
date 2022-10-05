@@ -7,13 +7,10 @@ import com.alaishat.ahmed.mobostore.data.Result
 import com.alaishat.ahmed.mobostore.data.products.ProductsRepository
 import com.alaishat.ahmed.mobostore.model.HomeCategory
 import com.alaishat.ahmed.mobostore.model.Product
-import com.alaishat.ahmed.mobostore.ui.screens.product.ProductViewModel
-import com.alaishat.ahmed.mobostore.utils.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 /**
