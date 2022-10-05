@@ -15,6 +15,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -35,6 +36,8 @@ import com.alaishat.ahmed.mobostore.utils.animatePage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlin.math.absoluteValue
 
 /**
@@ -47,6 +50,30 @@ fun ProductScreen(
     snackbarHostState: SnackbarHostState,
     productViewModel: ProductViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
+    val onGoToBasketState by rememberUpdatedState { navController.navigate(route = Screen.Basket.route) }
+    val onRefreshState by rememberUpdatedState { productViewModel.refreshProduct() }
+
+    LaunchedEffect(snackbarHostState) {
+        productViewModel.oneShotEvents
+            .onEach {
+                val (actionLabel, action) =
+                    when (it) {
+                        ProductViewModel.OneShotEvent.NetworkError -> Pair(R.string.retry, onRefreshState)
+                        ProductViewModel.OneShotEvent.ItemAdded,
+                        ProductViewModel.OneShotEvent.ItemAlreadyExist -> Pair(R.string.basket, onGoToBasketState)
+                    }
+                val snackbarResult = snackbarHostState.showSnackbar(
+                    message = context.getString(it.message!!),
+                    actionLabel = context.getString(actionLabel)
+                )
+                if (snackbarResult == SnackbarResult.ActionPerformed) {
+                    action()
+                }
+            }.collect()
+    }
+
     // UiState of the HomeScreen
     val uiState by productViewModel.uiState.collectAsState()
 
@@ -68,74 +95,15 @@ fun ProductScreen(
                 { productViewModel.addToBasket(it) }
             )
         else {
-            if (uiState.errorMessages.isEmpty()) {
-                // if there are no products, and no error, let the user refresh manually
+//            if (uiState.errorMessages.isEmpty()) {
+//                // if there are no products, and no error, let the user refresh manually
                 Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                     NoConnectionScreen { productViewModel.refreshProduct() }
                 }
-            } else {
-                // there's currently an error showing, don't show any content
-                Box(Modifier.fillMaxSize()) { /* empty screen */ }
-            }
-        }
-    }
-
-    // Process one error message at a time and show them as Snackbars in the UI
-    if (uiState.errorMessages.isNotEmpty()) {
-        // Remember the errorMessage to display on the screen
-        val errorMessage = remember(uiState) { uiState.errorMessages[0] }
-
-        // Get the text to show on the message from resources
-        val errorMessageText: String = stringResource(errorMessage.messageId)
-        val retryMessageText = stringResource(id = R.string.retry)
-
-        // If refreshProduct or errorShown change while the LaunchedEffect is running,
-        // don't restart the effect and use the latest lambda values.
-        val onRefreshProductsState by rememberUpdatedState { productViewModel.refreshProduct() }
-        val onErrorDismissState by rememberUpdatedState { id: Long -> productViewModel.messageShown(id) }
-
-        // Effect running in a coroutine that displays the Snackbar on the screen
-        // If there's a change to errorMessageText, retryMessageText or snackbarHostState,
-        // the previous effect will be cancelled and a new one will start with the new values
-        LaunchedEffect(errorMessageText, retryMessageText, snackbarHostState) {
-            val snackbarResult = snackbarHostState.showSnackbar(
-                message = errorMessageText,
-                actionLabel = retryMessageText
-            )
-            if (snackbarResult == SnackbarResult.ActionPerformed) {
-                onRefreshProductsState()
-            }
-            // Once the message is displayed and dismissed, notify the ViewModel
-            onErrorDismissState(errorMessage.id)
-        }
-    }
-    // Process one error message at a time and show them as Snackbars in the UI
-    if (uiState.addMessages.isNotEmpty()) {
-        // Remember the errorMessage to display on the screen
-        val addMessage = remember(uiState) { uiState.addMessages[0] }
-
-        // Get the text to show on the message from resources
-        val messageText: String = stringResource(addMessage.messageId)
-        val goToText = stringResource(id = R.string.basket)
-
-        // If refreshProduct or errorShown change while the LaunchedEffect is running,
-        // don't restart the effect and use the latest lambda values.
-        val onGoToBasketState by rememberUpdatedState { navController.navigate(route = Screen.Basket.route) }
-        val onErrorDismissState by rememberUpdatedState { id: Long -> productViewModel.messageShown(id) }
-
-        // Effect running in a coroutine that displays the Snackbar on the screen
-        // If there's a change to errorMessageText, retryMessageText or snackbarHostState,
-        // the previous effect will be cancelled and a new one will start with the new values
-        LaunchedEffect(messageText, goToText, snackbarHostState) {
-            val snackbarResult = snackbarHostState.showSnackbar(
-                message = messageText,
-                actionLabel = goToText
-            )
-            if (snackbarResult == SnackbarResult.ActionPerformed) {
-                onGoToBasketState()
-            }
-            // Once the message is displayed and dismissed, notify the ViewModel
-            onErrorDismissState(addMessage.id)
+//            } else {
+//                // there's currently an error showing, don't show any content
+//                Box(Modifier.fillMaxSize()) { /* empty screen */ }
+//            }
         }
     }
 }
@@ -304,6 +272,7 @@ fun ItemImagesPager(images: List<Int>) {
 
 
 @Composable
+@Preview
 fun ProductPreview() {
     MoboStoreTheme {
         ProductScreen(rememberNavController(), SnackbarHostState())

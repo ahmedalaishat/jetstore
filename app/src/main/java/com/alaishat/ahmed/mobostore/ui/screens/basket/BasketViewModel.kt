@@ -26,13 +26,10 @@ data class BasketUiState(
     val basketProducts: List<BasketProduct> = emptyList(),
     val paymentMethods: List<PaymentMethod> = paymentCards,
     val selectedPaymentCard: PaymentMethod = visaCard,
-//    val isLoading: Boolean = true,
-    val errorMessages: List<ErrorMessage> = emptyList(),
 )
 
 @HiltViewModel
 class BasketViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val productsRepository: ProductsRepository,
     /// add user repository to use his address
 ) : ViewModel() {
@@ -56,10 +53,6 @@ class BasketViewModel @Inject constructor(
             }
         }
     }
-
-//    fun addToBasket(product: Product) {
-//        productsRepository.
-//    }
 
     fun increaseBasketProductCount(productId: Int) {
         productsRepository.increaseBasketProductCount(productId)

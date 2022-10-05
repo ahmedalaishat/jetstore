@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,12 +25,15 @@ import com.alaishat.ahmed.mobostore.ui.components.content.LoadingContent
 import com.alaishat.ahmed.mobostore.ui.components.headers.SearchHeader
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
 import com.alaishat.ahmed.mobostore.ui.screens.NoConnectionScreen
+import com.alaishat.ahmed.mobostore.ui.screens.home.HomeViewModel.OneShotEvent.NetworkError
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 import com.alaishat.ahmed.mobostore.utils.animatePage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -45,9 +49,29 @@ fun HomeScreen(
     snackbarHostState: SnackbarHostState,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
 
     // UiState of the HomeScreen
     val uiState by homeViewModel.uiState.collectAsState()
+
+    val onRefreshState by rememberUpdatedState { homeViewModel.refreshProducts() }
+
+    LaunchedEffect(snackbarHostState) {
+        homeViewModel.oneShotEvents
+            .onEach {
+                val (actionLabel, action) =
+                    when (it) {
+                        NetworkError -> Pair(R.string.retry, onRefreshState)
+                    }
+                val snackbarResult = snackbarHostState.showSnackbar(
+                    message = context.getString(it.message!!),
+                    actionLabel = context.getString(actionLabel)
+                )
+                if (snackbarResult == SnackbarResult.ActionPerformed) {
+                    action()
+                }
+            }.collect()
+    }
 
     Column(
         modifier = Modifier
@@ -74,14 +98,8 @@ fun HomeScreen(
             onRefresh = { homeViewModel.refreshProducts() },
             content = {
                 if (uiState.homeCategories.flatMap { it.products }.isEmpty()) {
-                    if (uiState.errorMessages.isEmpty()) {
-                        // if there are no products, and no error, let the user refresh manually
-                        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                            NoConnectionScreen { homeViewModel.refreshProducts() }
-                        }
-                    } else {
-                        // there's currently an error showing, don't show any content
-                        Box(Modifier.fillMaxSize()) { /* empty screen */ }
+                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                        NoConnectionScreen { homeViewModel.refreshProducts() }
                     }
                 } else {
                     HomeContent(navController, uiState)
@@ -90,35 +108,35 @@ fun HomeScreen(
         )
     }
 
-    // Process one error message at a time and show them as Snackbars in the UI
-    if (uiState.errorMessages.isNotEmpty()) {
-        // Remember the errorMessage to display on the screen
-        val errorMessage = remember(uiState) { uiState.errorMessages[0] }
-
-        // Get the text to show on the message from resources
-        val errorMessageText: String = stringResource(errorMessage.messageId)
-        val retryMessageText = stringResource(id = R.string.retry)
-
-        // If refreshProducts or errorShown change while the LaunchedEffect is running,
-        // don't restart the effect and use the latest lambda values.
-        val onRefreshProductState by rememberUpdatedState { homeViewModel.refreshProducts() }
-        val onErrorDismissState by rememberUpdatedState { id: Long -> homeViewModel.errorShown(id) }
-
-        // Effect running in a coroutine that displays the Snackbar on the screen
-        // If there's a change to errorMessageText, retryMessageText or snackbarHostState,
-        // the previous effect will be cancelled and a new one will start with the new values
-        LaunchedEffect(errorMessageText, retryMessageText, snackbarHostState) {
-            val snackbarResult = snackbarHostState.showSnackbar(
-                message = errorMessageText,
-                actionLabel = retryMessageText
-            )
-            if (snackbarResult == SnackbarResult.ActionPerformed) {
-                onRefreshProductState()
-            }
-            // Once the message is displayed and dismissed, notify the ViewModel
-            onErrorDismissState(errorMessage.id)
-        }
-    }
+//    // Process one error message at a time and show them as Snackbars in the UI
+//    if (uiState.errorMessages.isNotEmpty()) {
+//        // Remember the errorMessage to display on the screen
+//        val errorMessage = remember(uiState) { uiState.errorMessages[0] }
+//
+//        // Get the text to show on the message from resources
+//        val errorMessageText: String = stringResource(errorMessage.messageId)
+//        val retryMessageText = stringResource(id = R.string.retry)
+//
+//        // If refreshProducts or errorShown change while the LaunchedEffect is running,
+//        // don't restart the effect and use the latest lambda values.
+//        val onRefreshProductState by rememberUpdatedState { homeViewModel.refreshProducts() }
+//        val onErrorDismissState by rememberUpdatedState { id: Long -> homeViewModel.errorShown(id) }
+//
+//        // Effect running in a coroutine that displays the Snackbar on the screen
+//        // If there's a change to errorMessageText, retryMessageText or snackbarHostState,
+//        // the previous effect will be cancelled and a new one will start with the new values
+//        LaunchedEffect(errorMessageText, retryMessageText, snackbarHostState) {
+//            val snackbarResult = snackbarHostState.showSnackbar(
+//                message = errorMessageText,
+//                actionLabel = retryMessageText
+//            )
+//            if (snackbarResult == SnackbarResult.ActionPerformed) {
+//                onRefreshProductState()
+//            }
+//            // Once the message is displayed and dismissed, notify the ViewModel
+//            onErrorDismissState(errorMessage.id)
+//        }
+//    }
 }
 
 @Composable

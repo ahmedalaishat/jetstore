@@ -8,12 +8,9 @@ import com.alaishat.ahmed.mobostore.data.Result
 import com.alaishat.ahmed.mobostore.data.products.ProductsRepository
 import com.alaishat.ahmed.mobostore.data.products.homeCategories
 import com.alaishat.ahmed.mobostore.model.Product
-import com.alaishat.ahmed.mobostore.utils.ErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -28,8 +25,6 @@ data class ProductUiState(
     val favorites: Set<Int> = emptySet(),
     val selectedColor: Int = -1,
     val isLoading: Boolean = true,
-    val errorMessages: List<ErrorMessage> = emptyList(),
-    val addMessages: List<ErrorMessage> = emptyList(),
 )
 
 @HiltViewModel
@@ -43,6 +38,11 @@ class ProductViewModel @Inject constructor(
     // UI state exposed to the UI
     private val _uiState = MutableStateFlow(ProductUiState())
     val uiState: StateFlow<ProductUiState> = _uiState.asStateFlow()
+
+    // See https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
+    // For why channel > SharedFlow/StateFlow in this case
+    private val _oneShotEvents = Channel<OneShotEvent>(Channel.BUFFERED)
+    val oneShotEvents = _oneShotEvents.receiveAsFlow()
 
     init {
         refreshProduct()
@@ -71,11 +71,8 @@ class ProductViewModel @Inject constructor(
                         it.copy(product = result.data, isLoading = false, selectedColor = color)
                     }
                     is Result.Error -> {
-                        val errorMessages = it.errorMessages + ErrorMessage(
-                            id = UUID.randomUUID().mostSignificantBits,
-                            messageId = R.string.network_error
-                        )
-                        it.copy(errorMessages = errorMessages, isLoading = false)
+                        _oneShotEvents.send(OneShotEvent.NetworkError)
+                        it.copy(isLoading = false)
                     }
                 }
             }
@@ -85,7 +82,7 @@ class ProductViewModel @Inject constructor(
     /**
      * Toggle favorite of a product
      */
-    fun toggleFavourite(): Unit {
+    fun toggleFavourite() {
         viewModelScope.launch {
             productsRepository.toggleFavorite(productId)
         }
@@ -97,13 +94,17 @@ class ProductViewModel @Inject constructor(
     fun addToBasket(productId: Int) {
         val isAdded =
             productsRepository.addToBasket(homeCategories.flatMap { it.products }.first { it.id == productId })
-        _uiState.update {
-            val errorMessages = it.addMessages + ErrorMessage(
-                id = UUID.randomUUID().mostSignificantBits,
-                messageId = if (isAdded) R.string.item_added_to_basket else R.string.item_already_added_to_basket
-            )
-            it.copy(addMessages = errorMessages)
+        val event = if (isAdded) OneShotEvent.ItemAdded else OneShotEvent.ItemAlreadyExist
+        viewModelScope.launch {
+            _oneShotEvents.send(event)
         }
+//        _uiState.update {
+//            val errorMessages = it.addMessages + ErrorMessage(
+//                id = UUID.randomUUID().mostSignificantBits,
+//                messageId = if (isAdded) R.string.item_added_to_basket else R.string.item_already_added_to_basket
+//            )
+//            it.copy(addMessages = errorMessages)
+//        }
     }
 
 
@@ -116,14 +117,20 @@ class ProductViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Notify that an error was displayed on the screen
-     */
-    fun messageShown(errorId: Long) {
-        _uiState.update { currentUiState ->
-            val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
-            val addMessages = currentUiState.addMessages.filterNot { it.id == errorId }
-            currentUiState.copy(errorMessages = errorMessages, addMessages = addMessages)
-        }
+//    /**
+//     * Notify that an error was displayed on the screen
+//     */
+//    fun messageShown(errorId: Long) {
+//        _uiState.update { currentUiState ->
+//            val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
+//            val addMessages = currentUiState.addMessages.filterNot { it.id == errorId }
+//            currentUiState.copy(errorMessages = errorMessages, addMessages = addMessages)
+//        }
+//    }
+
+    sealed class OneShotEvent(val message: Int? = null) {
+        object NetworkError : OneShotEvent(R.string.network_error)
+        object ItemAdded : OneShotEvent(R.string.item_added_to_basket)
+        object ItemAlreadyExist : OneShotEvent(R.string.item_already_added_to_basket)
     }
 }

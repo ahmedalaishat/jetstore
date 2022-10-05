@@ -1,4 +1,4 @@
-package com.alaishat.ahmed.mobostore.ui.screens
+package com.alaishat.ahmed.mobostore.ui.screens.basket
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -34,7 +34,6 @@ import com.alaishat.ahmed.mobostore.ui.components.VerticalSpacer
 import com.alaishat.ahmed.mobostore.ui.components.buttons.PrimaryButton
 import com.alaishat.ahmed.mobostore.ui.components.headers.AppHeader
 import com.alaishat.ahmed.mobostore.ui.navigation.Screen
-import com.alaishat.ahmed.mobostore.ui.screens.basket.BasketViewModel
 import com.alaishat.ahmed.mobostore.ui.theme.AppTypefaceTokens
 import com.alaishat.ahmed.mobostore.ui.theme.MoboStoreTheme
 
