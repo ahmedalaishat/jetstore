@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Mobo Store"
+rootProject.name = "JetStore"
 include ':app'

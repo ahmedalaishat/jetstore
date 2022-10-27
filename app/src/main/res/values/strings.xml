@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MoboStore</string>
+    <string name="app_name">JetStore</string>
     <string name="wearables">Wearables</string>
     <string name="laptops">Laptops</string>
     <string name="phones">Phones</string>
